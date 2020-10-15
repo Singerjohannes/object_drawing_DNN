@@ -5,15 +5,31 @@ clc
 
 % load RDMs
 
+% specify where RDMs are saved 
+
 savepath = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_without_SIN';
 
-net_name = 'VGG16_SIN';%'regular_vgg16_imagenetsketches_ft_conv5-1';
+% specify which network to use
+
+net_name = 'VGG16_SIN'; %'regular_vgg16_imagenetsketches_ft_conv5-1';
 
 load(fullfile(savepath, ['photo_RDM_', net_name]))
 load(fullfile(savepath, ['drawing_RDM_', net_name]))
 load(fullfile(savepath, ['sketch_RDM_', net_name]))
 
-%% test if RDM similarities are significant
+% specify if statistics should be computed only for the finetuned layers 
+
+is_ft = 1; % 1 for yes, 0 for no 
+
+% select only the RDMs from the finetuned layers for statistical testing if is_ft is true 
+
+if is_ft
+    photo_RDM = photo_RDM(:,:,5:end);
+    drawing_RDM = drawing_RDM(:,:,5:end);
+    sketch_RDM = sketch_RDM(:,:,5:end);
+end 
+
+%% test for significane of RDM similarities
 
 photo_drawing_sim = [];
 photo_sketch_sim = [];

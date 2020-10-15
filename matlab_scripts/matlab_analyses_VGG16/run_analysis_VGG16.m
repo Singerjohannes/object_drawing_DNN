@@ -7,15 +7,15 @@ clc
 
 % specify path where activations are stored 
 
-path = 'F:/final_analysis/final';
+path = 'C:\Users\Johannes\Documents\Leipzig\Modelling\VNet';
 
-% specify which activations to load 
+% specify activations for which model to load 
 
-net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1';
+net_name = 'VNet';
 
 % specify where results should be saved 
 
-savepath = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_results\VGG16_with_finetuning';
+savepath = 'C:\Users\Johannes\Documents\Leipzig\Modelling\VNet\results';
 
 % load extracted activations from the network for each depiction seperately
 
@@ -39,15 +39,16 @@ save(fullfile(savepath, ['sketch_RDM_', net_name]), 'sketch_RDM')
 
 %% plot the RDM similarities
 
-layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'};
+% specify layer names for the network
 
+layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'};
 
 all_sims = cat(2, photo_drawing_similarity', drawing_sketch_similarity', photo_sketch_similarity')
 
 bar(all_sims)
 ylim([0 1])
 xticklabels([layer_names])
-xlabel('Layer in VGG16')
+xlabel(['Layer in ', net_name])
 ylabel('RDM Correlation between Depictions')
 legend({'Photo Drawing Similarity'; 'Drawing Sketch Similarity'; 'Photo Sketch Similarity'} ,'Location','northeast')
 title('Representational Similarity between Depictions across Layers')
@@ -62,13 +63,11 @@ BIG_RDM = compute_BIG_RDM(photo_activations, drawing_activations, sketch_activat
 
 %% plot super RDM 
 
-layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'; 'fc_3'};
 
 for layer=1:size(BIG_RDM,3)
 subplot(2,4,layer)
 imagesc(BIG_RDM(:,:,layer));
 title(layer_names{layer})
-%axis equal
 end 
 suptitle(['BIG RDMs across layers for ', net_name])
 
@@ -76,7 +75,7 @@ suptitle(['BIG RDMs across layers for ', net_name])
 
 save(fullfile(savepath, ['BIG_RDM_', net_name]), 'BIG_RDM')
 
-%% compute MDS and align the solution to the pooling layer 4 with procrustes alignment 
+%% compute MDS and align the solution to layer 4 with procrustes alignment 
 
 BIG_MDS_aligned = compute_MDS_procrustes(BIG_RDM);
 
@@ -176,15 +175,13 @@ legend({'Photos'; 'Drawings'; 'Sketches'} ,'Location','northwest')
 
 %% plotting for crossdecoding
 
-layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'; 'fc_3'};
-
 all_accs = cat(2, crossdecoding_results.final_photo_drawing_acc', crossdecoding_results.final_photo_sketch_acc',crossdecoding_results.final_drawing_sketch_acc');
 all_se = cat(2, crossdecoding_results.final_photo_drawing_se', crossdecoding_results.final_photo_sketch_se', crossdecoding_results.final_drawing_sketch_se');
 
 figure
 bar(all_accs-0.5, 'grouped')
 xticklabels([layer_names])
-xlabel('Layer in VGG16')
+xlabel(['Layer in ', net_name])
 yticks([-0.1:0.1:0.3])
 yticklabels([0.4:0.1:0.8])
 ylabel('Mean Classification Accuracy')

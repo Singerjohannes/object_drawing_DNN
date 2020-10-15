@@ -4,12 +4,11 @@ function [p_val, emp_value, distribution] = signed_perm_test(obs_val, fix_val, n
 %%% inputs: 
 %%% the values per observation (val_per_obs), 
 %%% the value to compare your observations with (fix_val)
-%%% and the number of permutations you want to perform for your test 
+%%% and the number of permutations you want to perform for your test (n_perm)
 %%% outputs: 
 %%% the significance value for the test (p_val)
 %%% the empirical value which the permutated distribution is tested against (emp_value)
-%%% and the distribution which is obtained using random permutation of your
-%%% data 
+%%% and the distribution which is obtained using random permutation of your data (distribution)  
 
 % compute the empirical value by substracting the fixed value from every observation and sum the results  
 

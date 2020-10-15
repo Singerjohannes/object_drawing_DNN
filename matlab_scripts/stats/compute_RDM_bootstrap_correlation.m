@@ -1,6 +1,6 @@
 function [p_val, emp_corr1, emp_corr2,emp_diff,diff_shuffled_corr] = compute_RDM_bootstrap_correlation(this_RDM1, this_RDM2, that_RDM1,that_RDM2, n_iter, n_sel) 
 
-%%% function to perform a bootstrap for RDM correlations 
+%%% function to perform a bootstrap test for RDM correlations 
 %%% inputs: two RDMs, number of permutations, number of rows and columns
 %%% that should be selected from the RDM 
 %%% outputs : observed value of the empirical correlation and the lower and
@@ -28,13 +28,13 @@ for i=1:n_iter
     shuffled_corr2(i) = corr(sel_that_RDM1(this_sel)', sel_that_RDM2(this_sel)', 'type', 'spearman');
 end 
 
-% make Z-transform
+% apply z-transform
 emp_z1 = atanh(emp_corr1);
 emp_z2 = atanh(emp_corr2);
 shuffled_z1 = atanh(shuffled_corr1);
 shuffled_z2 = atanh(shuffled_corr2);
 
-% get the difference
+% get the difference and transform back to r-values
 if emp_corr1 >emp_corr2
 emp_diff = tanh(emp_z1-emp_z2);
 diff_shuffled_corr = tanh(shuffled_z1-shuffled_z2);
@@ -44,8 +44,10 @@ diff_shuffled_corr = tanh(shuffled_z2-shuffled_z1);
 end
 
 diff_shuffled_corr = [0 ;diff_shuffled_corr];
+
 % get the p-value by finding the percentile of your empirical value in the
 % permutated distribution
+
 if emp_diff == 0; p_val=0; else 
 p_val = mean(diff_shuffled_corr<=0); end 
 

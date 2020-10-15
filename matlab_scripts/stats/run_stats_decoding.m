@@ -17,17 +17,13 @@ is_ft = 1; % 1 if yes, otherwise 0
 
 % specify where results should be saved and loaded
 
-if ~is_ft
 savepath = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_results\VGG16_with_without_SIN';
-elseif is_ft
-savepath = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_results\VGG16_with_finetuning';
-end 
 
 % load extracted activations from the network for each depiction seperately
-% 
-% photo_activations = load(fullfile(path, ['all_photo_activations_', net_name]));
-% drawing_activations = load(fullfile(path, ['all_drawing_activations_', net_name]));
-% sketch_activations = load(fullfile(path, ['all_sketch_activations_', net_name]));
+
+photo_activations = load(fullfile(path, ['all_photo_activations_', net_name]));
+drawing_activations = load(fullfile(path, ['all_drawing_activations_', net_name]));
+sketch_activations = load(fullfile(path, ['all_sketch_activations_', net_name]));
 
 %% load empirical classfication results 
 
@@ -43,8 +39,7 @@ photo_drawing_accs_emp = final_photo_drawing_acc;
 photo_sketch_accs_emp = final_photo_sketch_acc;
 drawing_sketch_accs_emp = final_drawing_sketch_acc;
 
-%% run the classification with permuation 
-
+%% run the classification with n permutations 
 
 % add libsvm 
 
@@ -56,6 +51,9 @@ original_vector = [9 1 8 3 7 1 2 9 10 9 2 8 3 9 9 5 8, ...
 
 fn = fieldnames(sketch_activations);
 clear xclass_kernel_photo_drawing xclass_kernel_photo_sketch xclass_kernel_drawing_sketch
+
+% precompute kernel for computational speed 
+
 for layer=length(fn):-1:1
         %initialize data matrix
         data_all = [];
@@ -75,6 +73,7 @@ end
         
 n_perm = 1000; 
 
+% do the actual (cross-)decoding
 
 for i=1:n_perm
     
@@ -140,8 +139,7 @@ drawing_vs_sketch_shuffle = drawing_accs_shuffle-sketch_accs_shuffle;
 drawing_vs_sketch_shuffle = [drawing_vs_sketch_emp; drawing_vs_sketch_shuffle];
 
 for layer = 1:size(photo_accs_emp,2)-1
-
-    % photo vs drawing 
+    
     photo_vs_drawing_p(layer) = mean(photo_vs_drawing_shuffle(:,layer)>=photo_vs_drawing_emp(layer));
     photo_vs_sketch_p(layer) = mean(photo_vs_sketch_shuffle(:,layer)>=photo_vs_sketch_emp(layer));
     drawing_vs_sketch_p(layer) = mean(drawing_vs_sketch_shuffle(:,layer)>=drawing_vs_sketch_emp(layer));

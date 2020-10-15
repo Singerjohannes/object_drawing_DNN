@@ -31,7 +31,7 @@ photo_RDM_SIN = photo_RDM;
 drawing_RDM_SIN = drawing_RDM;
 sketch_RDM_SIN = sketch_RDM;
 
-% load RDMs for VGG16 - experiment 1 
+% load RDMs for VGG16 with finetuning - experiment 3 
 
 savepath = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_finetuning';
 
@@ -166,7 +166,7 @@ for layer = 1:size(photo_RDM_IN,3)
 
 end 
 
-[photo_DNN_human_IN_FT_decision,~] = fdr_bh(photo_DNN_human_IN_vs_FT_p,0.05,'dep');
-[drawing_DNN_human_IN_FT_decision,~] = fdr_bh(drawing_DNN_human_IN_vs_FT_p,0.05,'dep');
-[sketch_DNN_human_IN_FT_decision,~] = fdr_bh(sketch_DNN_human_IN_vs_FT_p,0.05,'dep');
+[photo_DNN_human_IN_FT_decision,~] = fdr_bh(photo_DNN_human_IN_vs_FT_p(5:end),0.05,'dep');
+[drawing_DNN_human_IN_FT_decision,~] = fdr_bh(drawing_DNN_human_IN_vs_FT_p(5:end),0.05,'dep');
+[sketch_DNN_human_IN_FT_decision,~] = fdr_bh(sketch_DNN_human_IN_vs_FT_p(5:end),0.05,'dep');
 

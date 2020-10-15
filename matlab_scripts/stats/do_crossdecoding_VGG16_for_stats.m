@@ -1,7 +1,16 @@
 function [final_photo_drawing_acc, final_photo_sketch_acc,final_drawing_sketch_acc] = do_crossdecoding_VGG16(photo_activations, drawing_activations, sketch_activations, n_iter, category_vector, passed_kernel)
+
 % classify manmade/natural in each layer for different depictions - but train
 % on one depiction but test on the other
 % input: the activation cell arrays for each depiction seperately
+% (*_activations) , the number of cross-validation iterations (n_iter), the
+% category vector in case a shuffled category vector needs to be passed
+% (category_vector), and the precomputed kernel for speeding up the
+% analysis (passed_kernel) 
+% output : decoding accuracies for training on photos and testing on
+% drawings (final_photo_drawing_acc), for training on photos and testing on
+% sketches (final_photo_sketch_acc), and for training on drawings and
+% testing on sketches (final_drawing_sketch_acc) 
 
 if ~exist('passed_kernel','var')
     fn = fieldnames(sketch_activations);
@@ -64,12 +73,9 @@ for layer=1:lfn
         
         testind = find(TESTIND(:,i));
         trainind = find(TRAININD(:,i));
-        
-        %     r_natural = randperm(length(category_vector)/2);
-        %     r_manmade = randperm(length(category_vector)/2)+length(category_vector)/2;
-        %     testind = [r_natural(1:3) r_manmade(1:3)]';
-        %     trainind = setdiff(1:length(category_vector),testind)';
+     
         label_train = labels(trainind);
+        
         % select training data for all depictions
         data_train_kernel = kernel_all(trainind,trainind,:);
         

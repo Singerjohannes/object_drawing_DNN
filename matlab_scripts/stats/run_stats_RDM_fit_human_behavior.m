@@ -3,13 +3,13 @@
 clear all
 clc
 
-% specify if statistics should be computed only for the finetuned layers 
-
-is_ft = 1; % 1 for yes, 0 for no 
-
 % load RDMs 
 
+% specify where RDMs are saved 
+
 savepath = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_finetuning';
+
+% specify which network to use 
 
 net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1'%;'VGG16_SIN';
 
@@ -17,11 +17,6 @@ load(fullfile(savepath, ['photo_RDM_', net_name]))
 load(fullfile(savepath, ['drawing_RDM_', net_name]))
 load(fullfile(savepath, ['sketch_RDM_', net_name]))
 
-if is_ft
-    photo_RDM = photo_RDM(:,:,5:end);
-    drawing_RDM = drawing_RDM(:,:,5:end);
-    sketch_RDM = sketch_RDM(:,:,5:end);
-end 
 % load behavioral data 
 
 behav_path = 'C:\Users\Johannes\Documents\Leipzig\Behavior\data';
@@ -62,6 +57,19 @@ sel_vector = ismember(ecoset_fn, imagenet_fn);
 photo_RDM_behav = photo_RDM_behav(sel_vector, sel_vector);
 drawing_RDM_behav = drawing_RDM_behav(sel_vector, sel_vector);
 sketch_RDM_behav = sketch_RDM_behav(sel_vector, sel_vector);
+
+
+% specify if statistics should be computed only for the finetuned layers 
+
+is_ft = 1; % 1 for yes, 0 for no 
+
+% select only the RDMs from the finetuned layers for statistical testing if is_ft is true 
+
+if is_ft
+    photo_RDM = photo_RDM(:,:,5:end);
+    drawing_RDM = drawing_RDM(:,:,5:end);
+    sketch_RDM = sketch_RDM(:,:,5:end);
+end 
 
 
 %% run stats on all similarities 

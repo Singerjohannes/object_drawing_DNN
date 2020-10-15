@@ -7,9 +7,15 @@ clc
 
 % set up paths 
 
+% path where CNN results are stored 
+
 DNN_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_without_SIN';
 
+% specify which network to use 
+
 net_name = 'VGG16';
+
+% path for the behavioral data 
 
 behav_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/behavior';
 
@@ -25,7 +31,7 @@ load(fullfile(behav_path, 'sketch_accs_per_image'));
 
 load(fullfile(DNN_path, ['top_1_acc_',net_name,'.mat']));
 
-%% compute the tests and get the pvalues 
+%% compute the signed-rank permutation tests and get the pvalues 
 
 n_perm = 1000;
 
@@ -34,7 +40,7 @@ drawing_human_cnn_pval = signed_perm_test(sel_drawing_results, VGG16_accs(2),n_p
 sketch_human_cnn_pval = signed_perm_test(sel_sketch_results, VGG16_accs(3),n_perm);
 
 human_cnn_p = [photo_human_cnn_pval drawing_human_cnn_pval sketch_human_cnn_pval];
-[human_cnn_decision,~] = fdr_bh(human_cnn_p,0.05,'dep');
+[human_cnn_decision,~,~,human_cnn_adj_p] = fdr_bh(human_cnn_p,0.05,'dep');
 
 %% test human accuracies against each other 
 
