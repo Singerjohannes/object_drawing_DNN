@@ -11,7 +11,7 @@ The repository contains matlab and python code for different parts of the projec
   - computing RDMs for different depictions across layers
   - computing the RDM similarity between depictions across layers 
   - computing the RDMs for all depictions combined across layers + computing the MDS-solutions for these RDMs and aligning the MDS-solutions to each other using the procrusted     method
-  - compute the fit between network RDMs and human behavioral RDMs (obtained using the scripts in the \behavioral folder) for each depiction and layer seperately 
+  - compute the fit between network RDMs and human behavioral RDMs (obtained using the analyze_triplet_results60.m scripts in the \behavioral folder) for each depiction and layer seperately 
   - compute the manmade vs. natural decoding (training and testing on the same depictions) and crossdecoding (training on one depiction but testing on another one) accuracies
  
  - to analyse the classification accuracies for the networks the following scripts were used: 
