@@ -24,3 +24,7 @@ The repository contains matlab and python code for different parts of the projec
     - to compare RDM similarities of different networks use run_RDM_sim_stats_between_networks.m 
     - to statistically evaluate the decoding/cross-decoding accuracies of the network use run_stats_decoding.m 
 
+
+### TODO: create selection of behavioral RDMS and label data for the stimuli used in the experiment (42 instead of 60) and remove the selection part in the git scripts 
+###       check necessary files for the analysis steps -> everything needs to be reproducible from scratch 
+###       maybe integrate the load_geirhos_model.py script into the extract_activations... and get_top1... scripts
