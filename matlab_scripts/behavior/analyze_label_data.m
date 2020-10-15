@@ -260,3 +260,6 @@ end
 
 save('results_table_label_sketches', 'results_table');
 
+%% compute mean acc per image for statistical analysis 
+
+

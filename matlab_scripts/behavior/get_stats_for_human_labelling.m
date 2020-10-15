@@ -3,13 +3,15 @@
 clc 
 clear all
 
+% specify paths where the results tables for the labelling experiment of
+% the different depictions are stored
+
 sketch_results = load('C:\Users\Johannes\Documents\Leipzig\Behavior\labelling\results/results_table_label_sketches.mat');
 photo_results = load('C:\Users\Johannes\Documents\Leipzig\Behavior\labelling\results/results_table_label_photos.mat');
 drawing_results = load('C:\Users\Johannes\Documents\Leipzig\Behavior\labelling\results/results_table_label_drawings.mat');
 
 
 %% get the selection vector for the imagenet images 
-
 
 % get ecoset filenames 
 
@@ -58,3 +60,19 @@ stds(2) = std(drawing_results.results_table.Accuracy(sel_vector)/40);
 mean_accs(3) = mean(sketch_results.results_table.Accuracy(sel_vector)/40);
 stderrs(3) = (std(sketch_results.results_table.Accuracy(sel_vector)/40))/sqrt(length(imagenet_fn));
 stds(3) = std(sketch_results.results_table.Accuracy(sel_vector)/40);
+
+%% compute mean per image for statistical analysis 
+
+mean_acc_per_photo = photo_results.results_table.Accuracy/40;
+
+mean_acc_per_drawing = drawing_results.results_table.Accuracy/40;
+
+mean_acc_per_sketch = sketch_results.results_table.Accuracy/40;
+
+%% save mean accuracies per image 
+
+save('photo_accs_per_image', 'mean_acc_per_photo')
+save('drawing_accs_per_image', 'mean_acc_per_drawing')
+save('sketch_accs_per_image', 'mean_acc_per_sketch')
+
+
