@@ -19,7 +19,7 @@ The repository contains matlab and python code for different parts of the projec
     
  - to compute the statistical comparisons for the results of the analysis the following scripts were used:
     - to compare network accuracies against each other use run_stats_accuracies_all_VGG16.py 
-    - to compare human accuracies (obtained using the scripts in the \behavioral folder) against each other and against network accuracies use run_stats_accuracies.m
+    - to compare human accuracies (obtained using the analyze_label_data.m script followed by the get_stats_for_human_labelling.m script in the \behavioral folder) against each other and against network accuracies use run_stats_accuracies.m
     - to statistically evaluate RDM similarities and compare them against each other use run_stats_RDM_sims.m
     - to compare RDM similarities of different networks use run_RDM_sim_stats_between_networks.m 
     - to statistically evaluate the decoding/cross-decoding accuracies of the network use run_stats_decoding.m 
