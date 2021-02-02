@@ -44,9 +44,9 @@ human_cnn_p = [photo_human_cnn_pval drawing_human_cnn_pval sketch_human_cnn_pval
 
 %% test human accuracies against each other 
 
-[~,photo_drawing_human_acc_p,~, photo_drawing_human_stat]= ttest(sel_photo_results, sel_drawing_results);
-[~, photo_sketch_human_acc_p, ~, photo_sketch_human_stat]= ttest(sel_photo_results, sel_sketch_results);
-[~, drawing_sketch_human_acc_p, ~, drawing_sketch_human_stat]= ttest(sel_drawing_results, sel_sketch_results);
+[~,photo_drawing_human_acc_p,~, photo_drawing_human_stat]= ttest2(sel_photo_results, sel_drawing_results);
+[~, photo_sketch_human_acc_p, ~, photo_sketch_human_stat]= ttest2(sel_photo_results, sel_sketch_results);
+[~, drawing_sketch_human_acc_p, ~, drawing_sketch_human_stat]= ttest2(sel_drawing_results, sel_sketch_results);
 
 human_p = [photo_sketch_human_acc_p drawing_sketch_human_acc_p];
 [human_acc_decision,~,~, human_acc_adj_p] = fdr_bh(human_p,0.05,'dep');

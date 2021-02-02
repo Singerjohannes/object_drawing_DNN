@@ -9,7 +9,7 @@ path = 'F:/final_analysis/final';
 
 % specify which activations to load 
 
-net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1';%'VGG16_SIN'; %'VGG16_SIN'
+net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1';%'VGG16'; %'VGG16_SIN'
 
 % specify if stats should be computed only for the finetuned layers 
 
@@ -17,7 +17,7 @@ is_ft = 1; % 1 if yes, otherwise 0
 
 % specify where results should be saved and loaded
 
-savepath = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_results\VGG16_with_without_SIN';
+savepath = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_results\VGG16_with_finetuning';
 
 % load extracted activations from the network for each depiction seperately
 
@@ -129,7 +129,7 @@ end
 %% check for significance compared to each other 
 
 photo_vs_drawing_emp = photo_accs_emp-drawing_accs_emp;
-photo_vs_drawing_shuffle = photo_accs_shuffle-drawing_accs_shuffle;
+photo_vs_drawing_shuffle = (photo_accs_shuffle-drawing_accs_shuffle);
 photo_vs_drawing_shuffle = [photo_vs_drawing_emp; photo_vs_drawing_shuffle];
 photo_vs_sketch_emp = photo_accs_emp-sketch_accs_emp;
 photo_vs_sketch_shuffle = photo_accs_shuffle-sketch_accs_shuffle;

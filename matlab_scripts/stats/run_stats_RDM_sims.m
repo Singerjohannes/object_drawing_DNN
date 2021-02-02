@@ -11,7 +11,7 @@ savepath = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16
 
 % specify which network to use
 
-net_name = 'VGG16_SIN'; %'regular_vgg16_imagenetsketches_ft_conv5-1';
+net_name = 'VGG16'; %'regular_vgg16_imagenetsketches_ft_conv5-1';
 
 load(fullfile(savepath, ['photo_RDM_', net_name]))
 load(fullfile(savepath, ['drawing_RDM_', net_name]))
@@ -19,7 +19,7 @@ load(fullfile(savepath, ['sketch_RDM_', net_name]))
 
 % specify if statistics should be computed only for the finetuned layers 
 
-is_ft = 1; % 1 for yes, 0 for no 
+is_ft = 0; % 1 for yes, 0 for no 
 
 % select only the RDMs from the finetuned layers for statistical testing if is_ft is true 
 

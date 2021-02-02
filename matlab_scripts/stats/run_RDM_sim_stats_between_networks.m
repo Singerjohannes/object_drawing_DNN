@@ -132,9 +132,9 @@ end
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_DNN_human_IN_vs_SIN_p(layer), photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_SIN(layer)]  = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer),squareform(1-squareform(photo_RDM_behav)), photo_RDM_SIN(:,:,layer), squareform(1-squareform(photo_RDM_behav)),1000);
-    [drawing_DNN_human_IN_vs_SIN_p(layer), drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer),squareform(1-squareform(drawing_RDM_behav)), drawing_RDM_SIN(:,:,layer), squareform(1-squareform(drawing_RDM_behav)),1000);
-    [sketch_DNN_human_IN_vs_SIN_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(sketch_RDM_IN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)), sketch_RDM_SIN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)),1000);
+    [photo_DNN_human_IN_vs_SIN_p(layer), photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_SIN(layer)]  = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer),squareform(1-squareform(photo_RDM_behav)), photo_RDM_SIN(:,:,layer), squareform(1-squareform(photo_RDM_behav)),10000);
+    [drawing_DNN_human_IN_vs_SIN_p(layer), drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer),squareform(1-squareform(drawing_RDM_behav)), drawing_RDM_SIN(:,:,layer), squareform(1-squareform(drawing_RDM_behav)),10000);
+    [sketch_DNN_human_IN_vs_SIN_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(sketch_RDM_IN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)), sketch_RDM_SIN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)),10000);
 
 end 
 

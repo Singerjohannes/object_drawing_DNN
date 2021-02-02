@@ -22,15 +22,15 @@ import scipy.io as sio
 
 # specify path were activations should be saved to and name of network for saving
 
-savepath = "F:/final_analysis/final"
-net_name = 'VGG16_SIN'
+savepath = "D:/object_drawing_DNN/SVRHM_revision/VGG16_activations"
+net_name = 'VGG16'
 
 # load model 
 
-filepath = 'F:/final_analysis/VGG_finetune/'+ net_name+ '.pt'
+# filepath = 'F:/final_analysis/VGG_finetune/'+ net_name+ '.pt'
 model = torchvision.models.vgg16(pretrained=True) # set True and comment out the following 2 lines to get plain VGG16
-checkpoint = torch.load(filepath)
-model.load_state_dict(checkpoint)
+# checkpoint = torch.load(filepath)
+# model.load_state_dict(checkpoint)
 
 idx_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_scripts/python/analysis/imnet_mapping'
 
@@ -94,7 +94,7 @@ def get_activation(name):
 
 # specify model.features.module for DataParallel features and model.features for Sequential features
     
-for idx,layer in enumerate(model.features.module):
+for idx,layer in enumerate(model.features):
     layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
 
 for idx,layer in enumerate(model.classifier):

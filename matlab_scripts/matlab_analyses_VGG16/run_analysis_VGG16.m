@@ -7,11 +7,11 @@ clc
 
 % specify path where activations are stored 
 
-path = 'C:\Users\Johannes\Documents\Leipzig\Modelling\VNet';
+path = 'D:\object_drawing_DNN\activations\VGG-16';
 
 % specify activations for which model to load 
 
-net_name = 'VNet';
+net_name = 'VGG-16';
 
 % specify where results should be saved 
 
@@ -99,29 +99,6 @@ set(hL,'Position', newPosition,'Units', newUnits);
 
 save(fullfile(savepath, ['BIG_MDS_aligned_' , net_name]), 'BIG_MDS_aligned')
 
-%% compute fit to human behavior 
-
-[photo_DNN_behav_sims, drawing_DNN_behav_sims, sketch_DNN_behav_sims] = compute_fit_DNN_behavior(photo_RDM, drawing_RDM, sketch_RDM) ;
-
-%% plot the fit to human behavior 
-
-layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'};
-
-
-all_sims = cat(2, photo_DNN_behav_sims', drawing_DNN_behav_sims', sketch_DNN_behav_sims');
-
-bar(all_sims)
-ylim([0 1])
-xticklabels([layer_names])
-xlabel('Layer in VGG16')
-ylabel('RDM Correlation between DNN and Behavior')
-legend({'Photo Similarity'; 'Drawing Similarity'; 'Sketch Similarity'} ,'Location','northeast')
-title(['Representational Similarity between ', net_name, ' and Human Behavior across Layers'])
-
-%% save the fit to human behavior 
-
-save(fullfile(savepath,[net_name,'_behav_fit.mat']), 'photo_DNN_behav_sims', 'drawing_DNN_behav_sims', 'sketch_DNN_behav_sims')
-
 %% compute the classification results for the manmade/natural distinctions based on the features extracted from the network across layers
 
 % add libsvm 
@@ -141,10 +118,10 @@ fprintf(['Saved crossdecoding results for ', net_name,'\n'])
 
 %% plotting for decoding  
 
-layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'; 'fc_3'};
+layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'};
 
-all_accs = cat(2, decoding_results.final_photo_acc', decoding_results.final_drawing_acc', decoding_results.final_sketch_acc');
-all_se = cat(2, decoding_results.final_photo_se', decoding_results.final_drawing_se', decoding_results.final_sketch_se');
+all_accs = cat(2, decoding_results.final_photo_acc(1:end-1)', decoding_results.final_drawing_acc(1:end-1)', decoding_results.final_sketch_acc(1:end-1)');
+all_se = cat(2, decoding_results.final_photo_se(1:end-1)', decoding_results.final_drawing_se(1:end-1)', decoding_results.final_sketch_se(1:end-1)');
 
 figure
 bar(all_accs-0.5, 'grouped')
@@ -175,15 +152,16 @@ legend({'Photos'; 'Drawings'; 'Sketches'} ,'Location','northwest')
 
 %% plotting for crossdecoding
 
-all_accs = cat(2, crossdecoding_results.final_photo_drawing_acc', crossdecoding_results.final_photo_sketch_acc',crossdecoding_results.final_drawing_sketch_acc');
-all_se = cat(2, crossdecoding_results.final_photo_drawing_se', crossdecoding_results.final_photo_sketch_se', crossdecoding_results.final_drawing_sketch_se');
+all_accs = cat(2, crossdecoding_results.final_photo_drawing_acc(1:end-1)', crossdecoding_results.final_photo_sketch_acc(1:end-1)',crossdecoding_results.final_drawing_sketch_acc(1:end-1)');
+all_se = cat(2, crossdecoding_results.final_photo_drawing_se(1:end-1)', crossdecoding_results.final_photo_sketch_se(1:end-1)', crossdecoding_results.final_drawing_sketch_se(1:end-1)');
 
 figure
 bar(all_accs-0.5, 'grouped')
 xticklabels([layer_names])
 xlabel(['Layer in ', net_name])
-yticks([-0.1:0.1:0.3])
-yticklabels([0.4:0.1:0.8])
+ylim([-0.1 0.5])
+yticks([-0.1:0.1:0.5])
+yticklabels([0.4:0.1:1])
 ylabel('Mean Classification Accuracy')
 title(['Mean classification accuracy across layers for decoding across depictions for network ', net_name])
 
@@ -204,3 +182,26 @@ for i = 1:nbars
     errorbar(x, all_accs(:,i)-0.5, all_se(:,i), 'k', 'linestyle', 'none');
 end
 legend({'Photo-Drawing'; 'Photo-Sketch'; 'Drawing-Sketch'} ,'Location','northwest')
+
+%% compute fit to human behavior 
+
+[photo_DNN_behav_sims, drawing_DNN_behav_sims, sketch_DNN_behav_sims] = compute_fit_DNN_behavior(photo_RDM, drawing_RDM, sketch_RDM) ;
+
+%% plot the fit to human behavior 
+
+layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'};
+
+
+all_sims = cat(2, photo_DNN_behav_sims', drawing_DNN_behav_sims', sketch_DNN_behav_sims');
+
+bar(all_sims)
+ylim([0 1])
+xticklabels([layer_names])
+xlabel('Layer in VGG16')
+ylabel('RDM Correlation between DNN and Behavior')
+legend({'Photo Similarity'; 'Drawing Similarity'; 'Sketch Similarity'} ,'Location','northeast')
+title(['Representational Similarity between ', net_name, ' and Human Behavior across Layers'])
+
+%% save the fit to human behavior 
+
+save(fullfile(savepath,[net_name,'_behav_fit.mat']), 'photo_DNN_behav_sims', 'drawing_DNN_behav_sims', 'sketch_DNN_behav_sims')

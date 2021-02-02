@@ -11,7 +11,7 @@ savepath = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16
 
 % specify which network to use 
 
-net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1'%;'VGG16_SIN';
+net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1';%'regular_vgg16_imagenetsketches_ft_conv5-1'%;'VGG16_SIN';
 
 load(fullfile(savepath, ['photo_RDM_', net_name]))
 load(fullfile(savepath, ['drawing_RDM_', net_name]))
@@ -21,43 +21,14 @@ load(fullfile(savepath, ['sketch_RDM_', net_name]))
 
 behav_path = 'C:\Users\Johannes\Documents\Leipzig\Behavior\data';
 
-photo_RDM_behav = load(fullfile(behav_path, 'photos_mat.mat'), 'final_mat');
+photo_RDM_behav = load(fullfile(behav_path, 'photo_behav_RDM.mat'), 'final_mat');
 photo_RDM_behav = photo_RDM_behav.final_mat;
 
-drawing_RDM_behav = load(fullfile(behav_path,'drawings_mat.mat'), 'final_mat');
+drawing_RDM_behav = load(fullfile(behav_path,'drawing_behav_RDM.mat'), 'final_mat');
 drawing_RDM_behav = drawing_RDM_behav.final_mat;
 
-sketch_RDM_behav = load(fullfile(behav_path,'sketches_mat.mat'), 'final_mat');
+sketch_RDM_behav = load(fullfile(behav_path,'sketches_behav_RDM.mat'), 'final_mat');
 sketch_RDM_behav = sketch_RDM_behav.final_mat;
-
-% select only imagenet objects from behavior RDMs 
-
-% get ecoset filenames 
-
-ecoset_path = 'C:\Users\Johannes\Documents\Leipzig\Modelling\Stimuli\ecoset\scaled\photos';
-
-fp = ecoset_path;
-fntmp = dir(fullfile(fp, '*.jpg'));
-ecoset_fn = {fntmp.name}';
-
-% get imagenet filenames 
-
-imagenet_path = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_stimuli\photos';
-
-fp = imagenet_path;
-fntmp = dir(fullfile(fp, '*.jpg'));
-imagenet_fn = {fntmp.name}';
-
-% get logical vector of overlay between imagenet and ecoset 
-
-sel_vector = ismember(ecoset_fn, imagenet_fn);
-
-% select rows and columns from the RDMs 
-
-photo_RDM_behav = photo_RDM_behav(sel_vector, sel_vector);
-drawing_RDM_behav = drawing_RDM_behav(sel_vector, sel_vector);
-sketch_RDM_behav = sketch_RDM_behav(sel_vector, sel_vector);
-
 
 % specify if statistics should be computed only for the finetuned layers 
 

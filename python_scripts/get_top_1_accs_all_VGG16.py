@@ -23,7 +23,7 @@ import json
 
 # load model 
 
-filepath = 'F:/final_analysis/VGG_finetune/regular_vgg16_imagenetsketches_ft_conv5-1.pt'
+filepath = 'F:/final_analysis/VGG_finetune/geirhos_vgg16_imagenetsketches_ft_conv5-1-33.pt'
 model = torchvision.models.vgg16(pretrained=True) # set True and comment out the following 2 lines to get plain VGG16
 checkpoint = torch.load(filepath)
 model.load_state_dict(checkpoint)
@@ -115,7 +115,7 @@ for batch in all_batches:
     
 # get the mean 
     
-#all_accs = [np.mean(acc) for acc in all_accs]
+all_accs = [np.mean(acc) for acc in all_accs]
 
 #%% save accuracies 
     
@@ -123,7 +123,7 @@ import pickle as pkl
     
 results_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_finetuning'
 
-pkl.dump(all_accs, open(os.path.join(results_path,'top_1_accs_regular_vgg16_imagenetsketches_ft_conv5-1.pkl'), 'wb'))
+pkl.dump(all_accs, open(os.path.join(results_path,'top_1_accs_geirhos_vgg16_imagenetsketches_ft_conv5-1-33.pkl'), 'wb'))
 
 #%% save for matlab 
 
