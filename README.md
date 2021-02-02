@@ -11,7 +11,7 @@ The repository contains matlab and python code for different parts of the projec
   - computing RDMs for different depictions across layers
   - computing the RDM similarity between depictions across layers 
   - computing the RDMs for all depictions combined across layers + computing the MDS-solutions for these RDMs and aligning the MDS-solutions to each other using the procrusted     method
-  - compute the fit between network RDMs and human behavioral RDMs (obtained using the scripts in the \behavioral folder) for each depiction and layer seperately 
+  - compute the fit between network RDMs and human behavioral RDMs (obtained using the analyze_triplet_results60.m scripts in the \behavioral folder) for each depiction and layer seperately 
   - compute the manmade vs. natural decoding (training and testing on the same depictions) and crossdecoding (training on one depiction but testing on another one) accuracies
  
  - to analyse the classification accuracies for the networks the following scripts were used: 
@@ -24,3 +24,7 @@ The repository contains matlab and python code for different parts of the projec
     - to compare RDM similarities of different networks use run_RDM_sim_stats_between_networks.m 
     - to statistically evaluate the decoding/cross-decoding accuracies of the network use run_stats_decoding.m 
 
+
+### TODO: create selection of behavioral RDMS and label data for the stimuli used in the experiment (42 instead of 60) and remove the selection part in the git scripts 
+###       check necessary files for the analysis steps -> everything needs to be reproducible from scratch 
+###       maybe integrate the load_geirhos_model.py script into the extract_activations... and get_top1... scripts
