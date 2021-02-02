@@ -5,10 +5,10 @@ With the material contained in this repository all of the results in the manuscr
  
 ## Models 
 
-The experiments in the manuscript use three different models, one for each of the experiments. 
-For experiment 1 the VGG-16 model pretrained on ImageNet (which comes with the pytorch package) was used.
-For experiment 2 the VGG-16 model pretrained on the stylized ImageNet (which can be retrieved from: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK) was used. 
-For experiment 3 the VGG-16 model pretrained on ImageNet and finetuned on the ImageNet-Sketch dataset (https://github.com/HaohanWang/ImageNet-Sketch) was used. The model weights for the finetuned model can be retrieved from (https://datashare.rzg.mpg.de/s/vUiWZ3oIV3QikZH).
+The experiments in the manuscript use three different models, one for each of the experiments: 
+- For experiment 1 the VGG-16 model pretrained on ImageNet (which comes with the pytorch package) was used.
+- For experiment 2 the VGG-16 model pretrained on the stylized ImageNet (which can be retrieved from: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK) was used. 
+- For experiment 3 the VGG-16 model pretrained on ImageNet and finetuned on the ImageNet-Sketch dataset (https://github.com/HaohanWang/ImageNet-Sketch) was used. The model weights for the finetuned model can be retrieved from (https://datashare.rzg.mpg.de/s/vUiWZ3oIV3QikZH).
 
 ## Analysis Structure 
 
