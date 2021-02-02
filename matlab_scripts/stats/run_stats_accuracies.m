@@ -13,7 +13,7 @@ DNN_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16
 
 % specify which network to use 
 
-net_name = 'VGG16';
+net_name = 'VGG16_SIN';
 
 % path for the behavioral data 
 

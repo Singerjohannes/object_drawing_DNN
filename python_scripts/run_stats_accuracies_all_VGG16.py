@@ -20,15 +20,13 @@ import pickle
 
 # load data for the different networks 
 
-results_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_without_SIN'
+results_path = '/object_drawing_DNN/results'
 
 accs = pickle.load(open(os.path.join(results_path, 'top_1_accs_VGG16.pkl'),'rb'))
 
 accs_SIN = pickle.load(open(os.path.join(results_path, 'top_1_accs_VGG16_SIN.pkl'),'rb'))
 
-results_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_finetuning'
-
-accs_ft = pickle.load(open(os.path.join(results_path, 'top_1_accs_regular_vgg16_imagenetsketches_ft_conv5-1.pkl'),'rb'))
+accs_ft = pickle.load(open(os.path.join(results_path, 'top_1_accs_VGG16_FT.pkl'),'rb'))
 
 
 #%% create contingency table for the networks 
@@ -123,9 +121,7 @@ print('Sketch - VGG16 with ft vs SIN ', format(stat_sketch_VGG16_SIN_ft.pvalue, 
 
 #%% FDR correction 
 
-# formula : adjusted p-value = p-value*(total number of hypotheses tested)/(rank of the p-value)
-
-# correct p_values
+# correct p_values for between network comparison 
 
 fdr_corrected_with_without_ft = multipletests([stat_photo_VGG16_with_without_ft.pvalue, stat_drawing_VGG16_with_without_ft.pvalue, stat_sketch_VGG16_with_without_ft.pvalue],alpha=0.05, method='fdr_bh', is_sorted=False, returnsorted=False)
 fdr_corrected_IN_SIN = multipletests([stat_photo_VGG16_with_without_SIN.pvalue, stat_drawing_VGG16_with_without_SIN.pvalue, stat_sketch_VGG16_with_without_SIN.pvalue],alpha=0.05, method='fdr_bh', is_sorted=False, returnsorted=False)

@@ -21,21 +21,38 @@ import numpy as np
 import os
 import json
 
-# load model 
+# specify name of model 
 
-filepath = 'F:/final_analysis/VGG_finetune/geirhos_vgg16_imagenetsketches_ft_conv5-1-33.pt'
-model = torchvision.models.vgg16(pretrained=True) # set True and comment out the following 2 lines to get plain VGG16
-checkpoint = torch.load(filepath)
-model.load_state_dict(checkpoint)
+net_name = 'VGG16' #either VGG16, VGG16_SIN or VGG16_FT
+
+is_ft = 0 #  specify whether you want to work with the finetuned or plain VGG model
+is_stylized = 0 #specify whether you want to work with the stylized or plain VGG model
+
+# specify where results should be saved 
+
+results_path = '/object_drawing_DNN/results'
+
+# load model 
+if is_ft: 
+    filepath = '/object_drawing_DNN/models/'+ net_name+ '.pt' # specify path for the weights of the finetuned model
+    model = torchvision.models.vgg16(pretrained=False)
+    checkpoint = torch.load(filepath)
+    model.load_state_dict(checkpoint)
+elif is_stylized: 
+    assert("model" in locals()), "Please load the stylized VGG16 with the load_geirhos_model.py script"
+elif not is_ft:
+    model = torchvision.models.vgg16(pretrained=True)
+    
+print(model)
 
 # path for files mapping imagenet labels to wordnet ids and their hyponyms/hypernyms
-idx_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_scripts/python/analysis/imnet_mapping'
+idx_path = '/object_drawing_DNN/python_scripts/imnet_mapping'
 
 # setup image-paths
 
-photo_path = "C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_stimuli/photos"
-drawing_path = "C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_stimuli/drawings"
-sketch_path = "C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_stimuli/sketches"
+photo_path = "/object_drawing_DNN/stimuli/photos"
+drawing_path = "/object_drawing_DNN/stimuli/drawings"
+sketch_path = "/object_drawing_DNN/stimuli/sketches"
 
 # load the images 
 
@@ -112,18 +129,12 @@ for batch in all_batches:
         this_acc.append(idxs[str(index.item())][0] in this_idxs)
     
     all_accs.append(this_acc)
-    
-# get the mean 
-    
-all_accs = [np.mean(acc) for acc in all_accs]
 
 #%% save accuracies 
     
 import pickle as pkl    
-    
-results_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_finetuning'
 
-pkl.dump(all_accs, open(os.path.join(results_path,'top_1_accs_geirhos_vgg16_imagenetsketches_ft_conv5-1-33.pkl'), 'wb'))
+pkl.dump(all_accs, open(os.path.join(results_path,'top_1_accs_'+net_name+'.pkl'), 'wb'))
 
 #%% save for matlab 
 
@@ -131,32 +142,4 @@ import scipy.io as sio
 
 all_accs = [np.mean(acc) for acc in all_accs]
 
-sio.savemat(os.path.join(results_path, 'top_1_acc_regular_vgg16_imagenetsketches_ft_conv5-1.mat'), {'VGG16_accs': all_accs})
-
-#%% classifiy with readable labels - for sanity checking 
-  
-
-with open('imagenet1000_clsidx_to_labels.txt') as f:
-  classes = [line.strip() for line in f.readlines()]
-  
-  
-model.eval()
-
-#sanity check for manual inspection of labels 
-
-for idx, batch in enumerate(photo_batch):
-
-    out = model(batch)
-    
-    _, index = torch.max(out, 1)
-
-    percentage = torch.nn.functional.softmax(out, dim=1)[0] * 100
-
-    print(listdir(photo_path)[idx], classes[index[0]], percentage[index[0]].item())
-
-#%% top 5 
-    _, indices = torch.sort(out, descending=True)
-
-    percentage = torch.nn.functional.softmax(out, dim=1)[0] * 100
-
-    print([(classes[idx], percentage[idx].item()) for idx in indices[0][:5]])
+sio.savemat(os.path.join(results_path, 'top_1_accs_'+net_name+'.mat'), {'all_accs': all_accs})

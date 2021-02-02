@@ -7,7 +7,7 @@ adapted from https://github.com/rgeirhos/texture-vs-shape
 
 """
 
-Load VGG16 pretrained on imagenet and VGG16 pretrained on stylized imagenet
+Load VGG16 pretrained on stylized imagenet
 
 """
 import os
@@ -37,7 +37,7 @@ def load_model(model_name):
         print("Using the VGG-16 architecture.")
        
         # download model from URL manually and save to desired location
-        filepath = "F:/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar"
+        filepath = "/object_drawing_DNN/models/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
 
         assert os.path.exists(filepath), "Please download the VGG model yourself from the following link and save it locally: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK (too large to be downloaded automatically like the other models)"
 
@@ -67,17 +67,6 @@ if __name__ == "__main__":
     #  IN = normal, standard ImageNet
 
     model_A = 'vgg16_trained_on_SIN'
-    model_B = "resnet50_trained_on_SIN_and_IN"
-    model_C = "resnet50_trained_on_SIN_and_IN_then_finetuned_on_IN"
-
-    # Note: these two models correspond to the ones reported in Figure 11.
-    # Hyperparameters (learning rate etc.) were NOT optimised (this was
-    # done in the rebuttal period with limited time), thus these
-    # models have lower performance than a typical model would have.
-    # If peak performance is important to you, I suggest to train the model
-    # yourself.
-    model_D = "vgg16_trained_on_SIN"
-    model_E = "alexnet_trained_on_SIN"
 
     model = load_model(model_A) # change to different model as desired
     print("Model download completed.")

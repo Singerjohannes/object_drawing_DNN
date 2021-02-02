@@ -2,7 +2,7 @@
 """
 Created on Wed Jun 10 15:24:55 2020
 
-@author: Johannes
+@author: Johannes Singer
 """
 
 #import stuff 
@@ -12,7 +12,7 @@ from collections import OrderedDict
 import torch
 import torchvision
 import torchvision.models
-from torch.utils import model_zoo
+from torch.utils import model_zoo as model_zoo
 from torchvision import transforms
 from os import listdir
 import numpy as np
@@ -22,23 +22,32 @@ import scipy.io as sio
 
 # specify path were activations should be saved to and name of network for saving
 
-savepath = "D:/object_drawing_DNN/SVRHM_revision/VGG16_activations"
-net_name = 'VGG16'
+savepath = ''
+net_name = 'VGG16' #either VGG16, VGG16_SIN or VGG16_FT
+
+is_ft = 0 #  specify whether you want to work with the finetuned or plain VGG model
+is_stylized = 0 #specify whether you want to work with the stylized or plain VGG model
 
 # load model 
-
-# filepath = 'F:/final_analysis/VGG_finetune/'+ net_name+ '.pt'
-model = torchvision.models.vgg16(pretrained=True) # set True and comment out the following 2 lines to get plain VGG16
-# checkpoint = torch.load(filepath)
-# model.load_state_dict(checkpoint)
-
-idx_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_scripts/python/analysis/imnet_mapping'
+if is_ft: 
+    filepath = '/object_drawing_DNN/models/'+ net_name+ '.pt' # specify path for the weights of the finetuned model
+    model = torchvision.models.vgg16(pretrained=False)
+    checkpoint = torch.load(filepath)
+    model.load_state_dict(checkpoint)
+elif is_stylized: 
+    assert("model" in locals()), "Please load the stylized VGG16 with the load_geirhos_model.py script"
+elif not is_ft:
+    model = torchvision.models.vgg16(pretrained=True)
+    
+print(model)
+        
+idx_path = '/object_drawing_DNN/python_scripts/imnet_mapping'
 
 # setup image-paths
 
-photo_path = "C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_stimuli/photos"
-drawing_path = "C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_stimuli/drawings"
-sketch_path = "C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_stimuli/sketches"
+photo_path = "/object_drawing_DNN/stimuli/photos"
+drawing_path = "/object_drawing_DNN/stimuli/drawings"
+sketch_path = "/object_drawing_DNN/stimuli/sketches"
 
 # load the images 
 
@@ -92,13 +101,18 @@ def get_activation(name):
         activations[name] = this_activation
     return hook
 
-# specify model.features.module for DataParallel features and model.features for Sequential features
+if not is_stylized:
+    for idx,layer in enumerate(model.features):
+        layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
     
-for idx,layer in enumerate(model.features):
-    layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
-
-for idx,layer in enumerate(model.classifier):
-    layer.register_forward_hook(get_activation('Classifier_'+ str(idx)))    
+    for idx,layer in enumerate(model.classifier):
+        layer.register_forward_hook(get_activation('Classifier_'+ str(idx)))  
+elif is_stylized: 
+    for idx,layer in enumerate(model.features.module):
+        layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
+    
+    for idx,layer in enumerate(model.classifier):
+        layer.register_forward_hook(get_activation('Classifier_'+ str(idx))) 
 
 
 #%% extract the features for all batches one after another
