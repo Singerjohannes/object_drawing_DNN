@@ -35,11 +35,19 @@ results_path = '/object_drawing_DNN/results'
 # load model 
 if is_ft: 
     filepath = '/object_drawing_DNN/models/'+ net_name+ '.pt' # specify path for the weights of the finetuned model
+    assert os.path.exists(filepath), "Please download the finetuned VGG model yourself from the following link and save it locally: https://datashare.rzg.mpg.de/s/vUiWZ3oIV3QikZH"
     model = torchvision.models.vgg16(pretrained=False)
     checkpoint = torch.load(filepath)
     model.load_state_dict(checkpoint)
 elif is_stylized: 
-    assert("model" in locals()), "Please load the stylized VGG16 with the load_geirhos_model.py script"
+    filepath = "/object_drawing_DNN/models/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
+    assert os.path.exists(filepath), "Please download the VGG model yourself from the following link and save it locally: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK (too large to be downloaded automatically like the other models)"
+    model = torchvision.models.vgg16(pretrained=False)
+    model.features = torch.nn.DataParallel(model.features)
+    model.cuda()
+    checkpoint = torch.load(filepath)
+    model.load_state_dict(checkpoint["state_dict"])
+
 elif not is_ft:
     model = torchvision.models.vgg16(pretrained=True)
     
@@ -108,27 +116,28 @@ all_accs = []
 categories = os.listdir(photo_path)
 categories = [txt.split('.')[0] for txt in categories]
 
-for batch in all_batches:
-    
-    this_acc = []
-    
-    for idx, this_batch in enumerate(batch):
-    
-        out = model(this_batch)
+with torch.no_grad():
+    for batch in all_batches:
         
-        _, index = torch.max(out, 1)
-    
-        # load correct indices for given image 
+        this_acc = []
         
-        with open(os.path.join(idx_path, categories[idx]+ '_idxs.txt')) as f:
-            this_idxs = [line.strip() for line in f.readlines()]
-            this_idxs = [txt.replace('-', '') for txt in this_idxs]
+        for idx, this_batch in enumerate(batch):
+        
+            out = model(this_batch)
             
-        # compare mapped category indices and the output 
-    
-        this_acc.append(idxs[str(index.item())][0] in this_idxs)
-    
-    all_accs.append(this_acc)
+            _, index = torch.max(out, 1)
+        
+            # load correct indices for given image 
+            
+            with open(os.path.join(idx_path, categories[idx]+ '_idxs.txt')) as f:
+                this_idxs = [line.strip() for line in f.readlines()]
+                this_idxs = [txt.replace('-', '') for txt in this_idxs]
+                
+            # compare mapped category indices and the output 
+        
+            this_acc.append(idxs[str(index.item())][0] in this_idxs)
+        
+        all_accs.append(this_acc)
 
 #%% save accuracies 
     

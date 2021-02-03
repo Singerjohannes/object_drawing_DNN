@@ -7,15 +7,15 @@ clc
 
 % specify path where activations are stored 
 
-path = 'D:\object_drawing_DNN\activations\VGG-16';
+path = '\object_drawing_DNN\';
 
 % specify activations for which model to load 
 
-net_name = 'VGG-16';
+net_name = 'VGG16_SIN';
 
 % specify where results should be saved 
 
-savepath = 'C:\Users\Johannes\Documents\Leipzig\Modelling\VNet\results';
+savepath = '\object_drawing_DNN\results';
 
 % load extracted activations from the network for each depiction seperately
 
@@ -103,7 +103,7 @@ save(fullfile(savepath, ['BIG_MDS_aligned_' , net_name]), 'BIG_MDS_aligned')
 
 % add libsvm 
 
-addpath(genpath('C:\Users\Johannes\Documents\Leipzig\Modelling\Matlab Scripts\libsvm3.17'))
+addpath(genpath('\libsvm3.17'))
 
 % do cross/decoding
 
@@ -185,12 +185,15 @@ legend({'Photo-Drawing'; 'Photo-Sketch'; 'Drawing-Sketch'} ,'Location','northwes
 
 %% compute fit to human behavior 
 
-[photo_DNN_behav_sims, drawing_DNN_behav_sims, sketch_DNN_behav_sims] = compute_fit_DNN_behavior(photo_RDM, drawing_RDM, sketch_RDM) ;
+% specify path where human behavioral RDMs are stored
+
+behav_path = '\object_drawing_DNN\data';
+
+[photo_DNN_behav_sims, drawing_DNN_behav_sims, sketch_DNN_behav_sims] = compute_fit_DNN_behavior(photo_RDM, drawing_RDM, sketch_RDM,behav_path) ;
 
 %% plot the fit to human behavior 
 
 layer_names = {'pool_1'; 'pool_2'; 'pool_3'; 'pool_4'; 'pool_5'; 'fc_1'; 'fc_2'};
-
 
 all_sims = cat(2, photo_DNN_behav_sims', drawing_DNN_behav_sims', sketch_DNN_behav_sims');
 

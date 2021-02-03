@@ -8,19 +8,11 @@ sketch_drawing_similarity=[];
 
 for i=1:size(photo_RDM,3)
     
-    photo_sketch_similarity(i) = corr(reshape(squareform(photo_RDM(:,:,i)), 1,[])', reshape(squareform(sketch_RDM(:,:,i)),1,[])', 'Type', 'Spearman');
+    photo_sketch_similarity(i) = corr(squareform(photo_RDM(:,:,i))', squareform(sketch_RDM(:,:,i))', 'Type', 'Spearman');
     
-end 
-
-for i=1:size(photo_RDM,3)
+    photo_drawing_similarity(i) = corr(squareform(photo_RDM(:,:,i))', squareform(drawing_RDM(:,:,i))', 'Type', 'Spearman');
     
-    photo_drawing_similarity(i) = corr(reshape(squareform(photo_RDM(:,:,i)), 1,[])', reshape(squareform(drawing_RDM(:,:,i)),1,[])', 'Type', 'Spearman');
-    
-end
-
-for i=1:size(photo_RDM,3)
-    
-    drawing_sketch_similarity(i) = corr(reshape(squareform(sketch_RDM(:,:,i)), 1,[])', reshape(squareform(drawing_RDM(:,:,i)),1,[])', 'Type', 'Spearman');
+    drawing_sketch_similarity(i) = corr(squareform(sketch_RDM(:,:,i))', squareform(drawing_RDM(:,:,i))', 'Type', 'Spearman');
     
 end
 end 

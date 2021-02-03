@@ -22,7 +22,7 @@ import scipy.io as sio
 
 # specify path were activations should be saved to and name of network for saving
 
-savepath = ''
+savepath = '/object_drawing_DNN/'
 net_name = 'VGG16' #either VGG16, VGG16_SIN or VGG16_FT
 
 is_ft = 0 #  specify whether you want to work with the finetuned or plain VGG model
@@ -34,8 +34,16 @@ if is_ft:
     model = torchvision.models.vgg16(pretrained=False)
     checkpoint = torch.load(filepath)
     model.load_state_dict(checkpoint)
+    
 elif is_stylized: 
-    assert("model" in locals()), "Please load the stylized VGG16 with the load_geirhos_model.py script"
+    filepath = "/object_drawing_DNN/models/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
+    assert os.path.exists(filepath), "Please download the VGG model yourself from the following link and save it locally: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK (too large to be downloaded automatically like the other models)"
+    model = torchvision.models.vgg16(pretrained=False)
+    model.features = torch.nn.DataParallel(model.features)
+    model.cuda()
+    checkpoint = torch.load(filepath)
+    model.load_state_dict(checkpoint["state_dict"])
+
 elif not is_ft:
     model = torchvision.models.vgg16(pretrained=True)
     
@@ -81,17 +89,6 @@ sketch_batch = [torch.unsqueeze(img, 0) for img in sketches_pre]
 
 all_batches = [photo_batch, drawing_batch, sketch_batch]
 
-
-#%% sancheck the preprocessed images 
-
-import matplotlib.pyplot as plt
-
-img = torch.squeeze(sketch_batch[38])
-img = img.numpy().transpose(1,2,0)
-plt.imshow(img)
-plt.show()
-
-
 #%% register the hooks for extracting features -VGG16   
 
 def get_activation(name):
@@ -106,7 +103,8 @@ if not is_stylized:
         layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
     
     for idx,layer in enumerate(model.classifier):
-        layer.register_forward_hook(get_activation('Classifier_'+ str(idx)))  
+        layer.register_forward_hook(get_activation('Classifier_'+ str(idx))) 
+        
 elif is_stylized: 
     for idx,layer in enumerate(model.features.module):
         layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
@@ -117,19 +115,23 @@ elif is_stylized:
 
 #%% extract the features for all batches one after another
 
-cond = ['photo', 'drawing', 'sketch']    
+cond = ['photo' ,'drawing', 'sketch']    
 relevant_layers = [4,9,16,23,30,0,3,6] 
-   
-    
+
+# bring model in evaluation mode 
+  
+model.eval()
+      
 for cond_idx, batch in enumerate(all_batches):
 
     these_activations = []
       
     for im_idx,img in enumerate(batch):
-        activations = {}
-        output = model(img)
-        these_activations.append(activations)
-        print('Image Nr. ' + str(im_idx))
+        with torch.no_grad():
+            activations = {}
+            output = model(img)
+            these_activations.append(activations)
+            print('Image Nr. ' + str(im_idx))
        
     # and format 
     
@@ -142,6 +144,7 @@ for cond_idx, batch in enumerate(all_batches):
                 activation_array.append(img_act['Layer_'+ str(layer)])
             elif 'Classifier_' + str(layer) in these_activations[0].keys():
                 activation_array.append(img_act['Classifier_'+ str(layer)])
+
         formatted_activations[layer] = np.array(activation_array)
         
     # update keys 

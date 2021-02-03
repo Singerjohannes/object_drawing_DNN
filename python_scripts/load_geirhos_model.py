@@ -37,7 +37,7 @@ def load_model(model_name):
         print("Using the VGG-16 architecture.")
        
         # download model from URL manually and save to desired location
-        filepath = "/object_drawing_DNN/models/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
+        filepath = "D:/object_drawing_DNN/models/final/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
 
         assert os.path.exists(filepath), "Please download the VGG model yourself from the following link and save it locally: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK (too large to be downloaded automatically like the other models)"
 
