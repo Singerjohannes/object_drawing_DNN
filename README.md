@@ -14,7 +14,7 @@ The experiments in the manuscript use three different models, one for each of th
 
 The structure of the analysis and the corresponding scripts are: 
 
-- before running the analysis, the activations of the networks need to be extracted using the following script: extract_activations_all_VGG16.py , which can be used to extract the activations for the experimental stimuli for the network VGG16 pretrained on ImageNet, for VGG16 trained on stylized ImageNet (network needs to be loaded with the script load_geirhos_model.py), and the VGG16 pretrained on ImageNet but finetuned on ImageNet-Sketch (finetuned using the script finetuning.py) 
+- before running the analysis, the activations of the networks need to be extracted using the following script: extract_activations_all_VGG16.py , which can be used to extract the activations for the experimental stimuli for the network VGG16 pretrained on ImageNet, for VGG16 trained on stylized ImageNet, and the VGG16 pretrained on ImageNet but finetuned on ImageNet-Sketch (finetuned using the script finetuning.py) 
 - to obtain top-1 accuracies for the stimuli from the experiment separately for each depiction use the script get_top_1_accs_all_VGG16.py (loading models follows the same logic as for extracting activations)
 - run_analyis_VGG16.m runs the whole analysis on the activations from one network. The analysis steps follow the logic of the results section in the paper for one experiment and contain: 
   - computing RDMs for different depictions across layers
