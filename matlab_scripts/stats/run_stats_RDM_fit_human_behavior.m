@@ -7,11 +7,11 @@ clc
 
 % specify where RDMs are saved 
 
-savepath = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_finetuning';
+savepath = '/object_drawing_DNN/results';
 
 % specify which network to use 
 
-net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1';%'regular_vgg16_imagenetsketches_ft_conv5-1'%;'VGG16_SIN';
+net_name = 'VGG16';%'VGG16_SIN';'VGG16_FT'
 
 load(fullfile(savepath, ['photo_RDM_', net_name]))
 load(fullfile(savepath, ['drawing_RDM_', net_name]))
@@ -19,16 +19,13 @@ load(fullfile(savepath, ['sketch_RDM_', net_name]))
 
 % load behavioral data 
 
-behav_path = 'C:\Users\Johannes\Documents\Leipzig\Behavior\data';
+behav_path = '\object_drawing_DNN\data';
 
-photo_RDM_behav = load(fullfile(behav_path, 'photo_behav_RDM.mat'), 'final_mat');
-photo_RDM_behav = photo_RDM_behav.final_mat;
+load(fullfile(behav_path, 'photo_behav_RDM.mat'));
 
-drawing_RDM_behav = load(fullfile(behav_path,'drawing_behav_RDM.mat'), 'final_mat');
-drawing_RDM_behav = drawing_RDM_behav.final_mat;
+load(fullfile(behav_path,'drawing_behav_RDM.mat'));
 
-sketch_RDM_behav = load(fullfile(behav_path,'sketches_behav_RDM.mat'), 'final_mat');
-sketch_RDM_behav = sketch_RDM_behav.final_mat;
+load(fullfile(behav_path,'sketch_behav_RDM.mat'));
 
 % specify if statistics should be computed only for the finetuned layers 
 

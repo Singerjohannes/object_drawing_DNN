@@ -9,15 +9,15 @@ clc
 
 % path where CNN results are stored 
 
-DNN_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/VGG16_with_without_SIN';
+DNN_path = '\object_drawing_DNN\results';
 
 % specify which network to use 
 
-net_name = 'VGG16_SIN';
+net_name = 'VGG16'; %'VGG16_SIN'; 'VGG16_FT;
 
 % path for the behavioral data 
 
-behav_path = 'C:/Users/Johannes/Documents/Leipzig/Masterarbeit/final_results/behavior';
+behav_path = '\object_drawing_DNN\data';
 
 % load the behavioral data 
 

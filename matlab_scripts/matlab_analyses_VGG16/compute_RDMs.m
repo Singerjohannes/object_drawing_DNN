@@ -1,6 +1,6 @@
 function [photo_RDM, drawing_RDM, sketch_RDM] = compute_RDMs(photo_activations, drawing_activations, sketch_activations)
 
-%% create RDMs for each layer and each condition 
+% create RDMs for each layer and each condition 
 
 % for photos
 

@@ -1,10 +1,10 @@
 function [p_val, emp_corr1, emp_corr2,emp_diff,diff_shuffled_corr] = compute_RDM_bootstrap_correlation(this_RDM1, this_RDM2, that_RDM1,that_RDM2, n_iter, n_sel) 
 
 %%% function to perform a bootstrap test for RDM correlations 
-%%% inputs: two RDMs, number of permutations, number of rows and columns
+%%% inputs: two RDM-pairs, number of permutations, number of rows and columns
 %%% that should be selected from the RDM 
-%%% outputs : observed value of the empirical correlation and the lower and
-%%% upper bounds for the confidence interval of the correlation
+%%% outputs : observed value of the empirical correlation and the
+%%% distribution of shuffled correlation differences
 
 emp_corr1 = corr(squareform(this_RDM1)', squareform(this_RDM2)', 'type', 'spearman');
 emp_corr2 = corr(squareform(that_RDM1)', squareform(that_RDM2)', 'type', 'spearman');
@@ -12,20 +12,24 @@ emp_corr2 = corr(squareform(that_RDM1)', squareform(that_RDM2)', 'type', 'spearm
 shuffled_corr1= zeros(n_iter,1);
 shuffled_corr2= zeros(n_iter,1);
 
-this_selmat = randi(length(squareform(this_RDM1)),length(squareform(this_RDM1)),n_iter);
+n_items = size(this_RDM1,1);
 
-sel_this_RDM1 = squareform(this_RDM1);
-sel_this_RDM2 = squareform(this_RDM2);
-sel_that_RDM1 = squareform(that_RDM1);
-sel_that_RDM2 = squareform(that_RDM2);
+ind = tril(true(n_items),-1);
+
+this_RDV = this_RDM1(ind);
+that_RDV= that_RDM1(ind);
+
+randmat = rand(n_items,n_iter);
+[~,permmat] = sort(randmat);
 
 for i=1:n_iter
    
-    this_sel = this_selmat(:,i);
-
-    shuffled_corr1(i) = corr(sel_this_RDM1(this_sel)', sel_this_RDM2(this_sel)', 'type', 'spearman');
+    this_RDM_perm = this_RDM2(permmat(:,i),permmat(:,i)); 
+    that_RDM_perm = that_RDM2(permmat(:,i),permmat(:,i));
+    
+    shuffled_corr1(i) = corr(this_RDV, this_RDM_perm(ind), 'type', 'spearman');
    
-    shuffled_corr2(i) = corr(sel_that_RDM1(this_sel)', sel_that_RDM2(this_sel)', 'type', 'spearman');
+    shuffled_corr2(i) = corr(that_RDV, that_RDM_perm(ind), 'type', 'spearman');
 end 
 
 % apply z-transform
@@ -43,12 +47,10 @@ emp_diff = tanh(emp_z2-emp_z1);
 diff_shuffled_corr = tanh(shuffled_z2-shuffled_z1);
 end
 
-diff_shuffled_corr = [0 ;diff_shuffled_corr];
+diff_shuffled_corr = [emp_diff ;diff_shuffled_corr];
 
 % get the p-value by finding the percentile of your empirical value in the
 % permutated distribution
-
-if emp_diff == 0; p_val=0; else 
-p_val = mean(diff_shuffled_corr<=0); end 
+p_val = mean(diff_shuffled_corr>=emp_diff); 
 
 end

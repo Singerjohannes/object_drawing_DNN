@@ -1,20 +1,22 @@
 function all_classification_results = do_crossdecoding_VGG16(photo_activations, drawing_activations, sketch_activations, n_iter)
 % classify manmade/natural in each layer for different depictions - but train
 % on one depiction but test on the other 
-% input: the activation cell arrays for each depiction seperately 
+% input: the activation cell arrays for each depiction seperately
+% (*_activations) , the number of cross-validation iterations (n_iter)
+% output : decoding accuracies and standard errors across layers 
 
 fn = fieldnames(sketch_activations);
 
+% specify superordinate category number for every column in the activation matrix 
 category_vector = [9 1 8 3 7 1 2 9 10 9 2 8 3 9 9 5 8, ...
                4 2 2 4 4 10 6 2 10 8 9 2 5 6 2 7 4, ...
                5 7 9 2 4 9 10 2]';
-           
+
+% get the labels - 2 = natural , 1 = manmade
 labels = (category_vector < 6)+1;
 
 % intialize accuracies for all layers 
 acc_all = zeros(n_iter,length(fn),3);
-
-manmade_natural_correct_class_count=zeros(2,3, length(fn));
 
 % classification loop 
 
@@ -72,11 +74,8 @@ for i = 1:n_iter
     % count the correct classifications for manmade and natural objects 
     
     this_photo_drawing_prediction = [(predicted_label_photo_drawing == label_test).*label_test];
-    manmade_natural_correct_class_count(:,1,layer) = manmade_natural_correct_class_count(:,1)+histc(this_photo_drawing_prediction, [1:2]);
     this_photo_sketch_prediction = [(predicted_label_photo_sketch == label_test).*label_test];
-    manmade_natural_correct_class_count(:,2,layer) = manmade_natural_correct_class_count(:,2)+histc(this_photo_sketch_prediction, [1:2]);
     this_drawing_sketch_prediction = [(predicted_label_drawing_sketch == label_test).*label_test];
-    manmade_natural_correct_class_count(:,3,layer) = manmade_natural_correct_class_count(:,3)+histc(this_drawing_sketch_prediction, [1:2]);
 end
 
 % get the mean and std error for every layer of the iterations 
@@ -99,5 +98,4 @@ all_classification_results.final_photo_sketch_acc = final_photo_sketch_acc;
 all_classification_results.final_photo_sketch_se = final_photo_sketch_se;
 all_classification_results.final_drawing_sketch_acc = final_drawing_sketch_acc;
 all_classification_results.final_drawing_sketch_se = final_drawing_sketch_se;
-all_classification_results.manmade_natural_correct_class_count = manmade_natural_correct_class_count;
 end 

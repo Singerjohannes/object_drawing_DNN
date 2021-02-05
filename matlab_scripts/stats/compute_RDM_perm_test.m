@@ -26,6 +26,6 @@ shuffled_corr= [emp_corr; shuffled_corr];
 % get the p-value by finding the percentile of your empirical value in the
 % permutated distribution
 
-pval = mean(abs(shuffled_corr) >= abs(emp_corr));
+pval = mean(shuffled_corr >= emp_corr);
 
 end

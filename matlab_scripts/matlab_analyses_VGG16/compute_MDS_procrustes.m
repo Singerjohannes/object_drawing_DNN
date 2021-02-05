@@ -9,7 +9,7 @@ BIG_MDS{layer} = mdscale(BIG_RDM(:,:,layer),2);
 
 end 
 
-% procrustes alignment 
+% procrustes alignment to pooling layer 4
 
 BIG_MDS_aligned = [];
 BIG_MDS_aligned{4} = BIG_MDS{4};

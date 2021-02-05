@@ -7,11 +7,11 @@ clc
 
 % specify path where activations are stored 
 
-path = '\object_drawing_DNN\';
+path = '\object_drawing_DNN\check';
 
 % specify activations for which model to load 
 
-net_name = 'VGG16_SIN';
+net_name = 'VGG16';%'VGG16_SIN';'VGG16_FT';
 
 % specify where results should be saved 
 
@@ -142,7 +142,6 @@ nbars = size(all_accs, 2);
 groupwidth = min(0.8, nbars/(nbars + 1.5));
 
 % Set the position of each error bar in the centre of the main bar
-% Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
 for i = 1:nbars
     % Calculate center of each bar
     x = (1:ngroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*nbars);
@@ -175,7 +174,6 @@ nbars = size(all_accs, 2);
 groupwidth = min(0.8, nbars/(nbars + 1.5));
 
 % Set the position of each error bar in the centre of the main bar
-% Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
 for i = 1:nbars
     % Calculate center of each bar
     x = (1:ngroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*nbars);

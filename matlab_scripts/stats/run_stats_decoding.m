@@ -5,19 +5,19 @@ clc
 
 % specify path where activations are stored 
 
-path = 'F:/final_analysis/final';
+path = '/object_drawing_DNN/';
 
 % specify which activations to load 
 
-net_name = 'regular_vgg16_imagenetsketches_ft_conv5-1';%'VGG16'; %'VGG16_SIN'
+net_name = 'VGG16';%'VGG16_SIN'; %'VGG16_FT'
 
 % specify if stats should be computed only for the finetuned layers 
 
-is_ft = 1; % 1 if yes, otherwise 0
+is_ft = 0; % 1 if yes, otherwise 0
 
 % specify where results should be saved and loaded
 
-savepath = 'C:\Users\Johannes\Documents\Leipzig\Masterarbeit\final_results\VGG16_with_finetuning';
+savepath = '/object_drawing_DNN/results';
 
 % load extracted activations from the network for each depiction seperately
 
@@ -43,7 +43,7 @@ drawing_sketch_accs_emp = final_drawing_sketch_acc;
 
 % add libsvm 
 
-addpath(genpath('C:\Users\Johannes\Documents\Leipzig\Modelling\Matlab Scripts\libsvm3.17'))
+addpath(genpath('\libsvm3.17'))
 
 original_vector = [9 1 8 3 7 1 2 9 10 9 2 8 3 9 9 5 8, ...
                4 2 2 4 4 10 6 2 10 8 9 2 5 6 2 7 4, ...
@@ -87,7 +87,7 @@ end
 save(fullfile(savepath,['permuted_classification_accuracies_',net_name]), 'photo_accs_shuffle', 'drawing_accs_shuffle', 'sketch_accs_shuffle');
 save(fullfile(savepath,['permuted_crossclassification_accuracies_',net_name]), 'photo_drawing_accs_shuffle', 'photo_sketch_accs_shuffle', 'drawing_sketch_accs_shuffle');
 
-%% load shuffled data 
+%% load shuffled data if already computed 
 
 load(fullfile(savepath,['permuted_classification_accuracies_',net_name]));
 load(fullfile(savepath,['permuted_crossclassification_accuracies_',net_name]));
@@ -123,35 +123,4 @@ elseif is_ft
     [photo_drawing_chance_decision,~, ~,photo_drawing_adj_p] = fdr_bh(photo_drawing_p(5:end),0.05,'dep');
     [photo_sketch_chance_decision,~,~, photo_sketch_adj_p] = fdr_bh(photo_sketch_p(5:end),0.05,'dep');
     [drawing_sketch_chance_decision,~,~, drawing_sketch_adj_p] = fdr_bh(drawing_sketch_p(5:end),0.05,'dep');
-end
-
-    
-%% check for significance compared to each other 
-
-photo_vs_drawing_emp = photo_accs_emp-drawing_accs_emp;
-photo_vs_drawing_shuffle = (photo_accs_shuffle-drawing_accs_shuffle);
-photo_vs_drawing_shuffle = [photo_vs_drawing_emp; photo_vs_drawing_shuffle];
-photo_vs_sketch_emp = photo_accs_emp-sketch_accs_emp;
-photo_vs_sketch_shuffle = photo_accs_shuffle-sketch_accs_shuffle;
-photo_vs_sketch_shuffle = [photo_vs_sketch_emp; photo_vs_sketch_shuffle];
-drawing_vs_sketch_emp = drawing_accs_emp-sketch_accs_emp;
-drawing_vs_sketch_shuffle = drawing_accs_shuffle-sketch_accs_shuffle;
-drawing_vs_sketch_shuffle = [drawing_vs_sketch_emp; drawing_vs_sketch_shuffle];
-
-for layer = 1:size(photo_accs_emp,2)-1
-    
-    photo_vs_drawing_p(layer) = mean(photo_vs_drawing_shuffle(:,layer)>=photo_vs_drawing_emp(layer));
-    photo_vs_sketch_p(layer) = mean(photo_vs_sketch_shuffle(:,layer)>=photo_vs_sketch_emp(layer));
-    drawing_vs_sketch_p(layer) = mean(drawing_vs_sketch_shuffle(:,layer)>=drawing_vs_sketch_emp(layer));
-
-end 
-
-if ~is_ft
-    [photo_vs_drawing_decision,~,~,photo_vs_drawing_adj_p] = fdr_bh(photo_vs_drawing_p,0.05,'dep');
-    [photo_vs_sketch_decision,~,~,photo_vs_sketch_adj_p] = fdr_bh(photo_vs_sketch_p,0.05,'dep');
-    [drawing_vs_sketch_decision,~,~,drawing_vs_sketch_adj_p] = fdr_bh(drawing_vs_sketch_p,0.05,'dep');
-elseif is_ft
-    [photo_vs_drawing_decision,~,~,photo_vs_drawing_adj_p] = fdr_bh(photo_vs_drawing_p(5:end),0.05,'dep');
-    [photo_vs_sketch_decision,~,~,photo_vs_sketch_adj_p] = fdr_bh(photo_vs_sketch_p(5:end),0.05,'dep');
-    [drawing_vs_sketch_decision,~,~,drawing_vs_sketch_adj_p] = fdr_bh(drawing_vs_sketch_p(5:end),0.05,'dep');
 end

@@ -1,18 +1,19 @@
 function all_classification_results = do_decoding_VGG16(photo_activations, drawing_activations, sketch_activations, n_iter)
 % classify manmade/natural in each layer for different depictions
-% input: the activation cell arrays for each depiction seperately 
-
+% input: the activation cell arrays for each depiction seperately
+% (*_activations) , the number of cross-validation iterations (n_iter)
+% output : decoding accuracies and standard errors across layers 
 
 fn = fieldnames(sketch_activations);
 
-% specify category number for every column in the activation matrix 
+% specify superordinate category number for every column in the activation matrix 
 
 category_vector = [9 1 8 3 7 1 2 9 10 9 2 8 3 9 9 5 8, ...
                4 2 2 4 4 10 6 2 10 8 9 2 5 6 2 7 4, ...
                5 7 9 2 4 9 10 2]';
            
 % get the labels - 2 = natural , 1 = manmade
-labels = 2*(category_vector < 6)-1;
+labels = (category_vector < 6)+1;
 
 % intialize accuracies for all layers 
 acc_all = zeros(n_iter,length(fn),3);
@@ -42,7 +43,6 @@ for i = 1:n_iter
     
    label_train = labels(trainind);
     % select training data for all depictions
-%     data_train_all = data_all(trainind,:,:);
     data_train_kernel = kernel_all(trainind,trainind,:);
     
     label_test = labels(testind);

@@ -13,7 +13,7 @@ end
 
 % create BIG RDMs for all layers
 
-BIG_RDM = []
+BIG_RDM = [];
 
 for layer = 1: length(all_activations) 
 
