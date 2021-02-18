@@ -7,7 +7,7 @@ clc
 
 % specify where RDMs are saved 
 
-savepath = 'D:/object_drawing_DNN/check_results';
+savepath = '/object_drawing_DNN/results';
 
 % specify which network to use
 
