@@ -1,8 +1,7 @@
-function [p_val, emp_corr1, emp_corr2,emp_diff,diff_shuffled_corr] = compute_RDM_bootstrap_correlation(this_RDM1, this_RDM2, that_RDM1,that_RDM2, n_iter, n_sel) 
+function [p_val, emp_corr1, emp_corr2,emp_diff,diff_shuffled_corr] = compute_RDM_pairwise_randomization_test(this_RDM1, this_RDM2, that_RDM1,that_RDM2, n_iter) 
 
-%%% function to perform a bootstrap test for RDM correlations 
-%%% inputs: two RDM-pairs, number of permutations, number of rows and columns
-%%% that should be selected from the RDM 
+%%% function to perform a pairwise randomization test for RDM correlations 
+%%% inputs: two RDM-pairs, number of permutations
 %%% outputs : observed value of the empirical correlation and the
 %%% distribution of shuffled correlation differences
 

@@ -51,9 +51,9 @@ drawing_sketch_p = [];
 
 for layer = 1: size(photo_RDM,3)
     
-    [photo_DNN_human_sim(layer), photo_DNN_human_p(layer),~] = compute_RDM_perm_test(photo_RDM(:,:,layer), 1-photo_RDM_behav, 1000);
-    [drawing_DNN_human_sim(layer), drawing_DNN_human_p(layer),~] = compute_RDM_perm_test(drawing_RDM(:,:,layer), 1-drawing_RDM_behav, 1000);
-    [sketch_DNN_human_sim(layer), sketch_DNN_human_p(layer),~] = compute_RDM_perm_test(sketch_RDM(:,:,layer), 1-sketch_RDM_behav, 1000);
+    [photo_DNN_human_sim(layer), photo_DNN_human_p(layer),~] = compute_RDM_randomization_test(photo_RDM(:,:,layer), 1-photo_RDM_behav, 1000);
+    [drawing_DNN_human_sim(layer), drawing_DNN_human_p(layer),~] = compute_RDM_randomization_test(drawing_RDM(:,:,layer), 1-drawing_RDM_behav, 1000);
+    [sketch_DNN_human_sim(layer), sketch_DNN_human_p(layer),~] = compute_RDM_randomization_test(sketch_RDM(:,:,layer), 1-sketch_RDM_behav, 1000);
 
 end 
 
@@ -66,9 +66,9 @@ end
 
 for this_layer = 1: size(photo_RDM,3)
         
-        photo_drawing_comp_p(this_layer) = compute_RDM_bootstrap_correlation(photo_RDM(:,:,this_layer),squareform(1-squareform(photo_RDM_behav)), drawing_RDM(:,:,this_layer), squareform(1-squareform(drawing_RDM_behav)),1000);
-        photo_sketch_comp_p(this_layer) = compute_RDM_bootstrap_correlation(photo_RDM(:,:,this_layer),squareform(1-squareform(photo_RDM_behav)), sketch_RDM(:,:,this_layer), squareform(1-squareform(sketch_RDM_behav)),1000);
-        drawing_sketch_comp_p(this_layer) = compute_RDM_bootstrap_correlation(drawing_RDM(:,:,this_layer),squareform(1-squareform(drawing_RDM_behav)), sketch_RDM(:,:,this_layer),squareform(1-squareform(sketch_RDM_behav)),1000);
+        photo_drawing_comp_p(this_layer) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,this_layer),squareform(1-squareform(photo_RDM_behav)), drawing_RDM(:,:,this_layer), squareform(1-squareform(drawing_RDM_behav)),1000);
+        photo_sketch_comp_p(this_layer) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,this_layer),squareform(1-squareform(photo_RDM_behav)), sketch_RDM(:,:,this_layer), squareform(1-squareform(sketch_RDM_behav)),1000);
+        drawing_sketch_comp_p(this_layer) = compute_RDM_pairwise_randomization_test(drawing_RDM(:,:,this_layer),squareform(1-squareform(drawing_RDM_behav)), sketch_RDM(:,:,this_layer),squareform(1-squareform(sketch_RDM_behav)),1000);
 
 end 
 

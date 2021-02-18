@@ -1,6 +1,6 @@
-function [emp_corr, pval, shuffled_corr] = compute_RDM_perm_test(this_RDM, that_RDM, n_iter) 
+function [emp_corr, pval, shuffled_corr] = compute_RDM_randomization_test(this_RDM, that_RDM, n_iter) 
 
-%%% function to perform a permutation test for the correlation between two RDMs 
+%%% function to perform a one-sided randomization test for the correlation between two RDMs 
 %%% inputs: two RDMs (this_RDM,that_RDM), number of permutations (n_iter)
 %%% outputs : p_value of the empirical correlation
 n_items = size(that_RDM,1);

@@ -9,15 +9,15 @@ clc
 
 % path where CNN results are stored 
 
-DNN_path = '\object_drawing_DNN\results';
+DNN_path = 'D:\object_drawing_DNN\check_results';
 
 % specify which network to use 
 
-net_name = 'VGG16'; %'VGG16_SIN'; 'VGG16_FT;
+net_name = 'VGG16_FT'; %'VGG16_SIN'; 'VGG16_FT;
 
 % path for the behavioral data 
 
-behav_path = '\object_drawing_DNN\data';
+behav_path = 'C:\Users\Johannes\Documents\Leipzig\Modelling\object_drawing_DNN\data';
 
 % load the behavioral data 
 
@@ -29,15 +29,15 @@ load(fullfile(behav_path, 'sketch_accs_per_image'));
 
 % load the DNN top-1 accuracies 
 
-load(fullfile(DNN_path, ['top_1_acc_',net_name,'.mat']));
+load(fullfile(DNN_path, ['top_1_accs_',net_name,'.mat']));
 
 %% compute the signed-rank permutation tests and get the pvalues 
 
 n_perm = 1000;
 
-photo_human_cnn_pval = signed_perm_test(sel_photo_results, VGG16_accs(1),n_perm);
-drawing_human_cnn_pval = signed_perm_test(sel_drawing_results, VGG16_accs(2),n_perm);
-sketch_human_cnn_pval = signed_perm_test(sel_sketch_results, VGG16_accs(3),n_perm);
+photo_human_cnn_pval = human_CNN_acc_randomization_test(sel_photo_results, VGG16_accs(1),n_perm);
+drawing_human_cnn_pval = human_CNN_acc_randomization_test(sel_drawing_results, VGG16_accs(2),n_perm);
+sketch_human_cnn_pval = human_CNN_acc_randomization_test(sel_sketch_results, VGG16_accs(3),n_perm);
 
 human_cnn_p = [photo_human_cnn_pval drawing_human_cnn_pval sketch_human_cnn_pval];
 [human_cnn_decision,~,~,human_cnn_adj_p] = fdr_bh(human_cnn_p,0.05,'dep');

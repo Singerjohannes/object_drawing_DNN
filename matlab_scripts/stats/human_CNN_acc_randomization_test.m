@@ -1,6 +1,6 @@
-function [p_val, emp_value, distribution] = signed_perm_test(obs_val, fix_val, n_perm) 
+function [p_val, emp_value, distribution] = human_CNN_acc_randomization_test(obs_val, fix_val, n_perm) 
 
-%%% function for computing a signed permutation test 
+%%% function for computing a one-sided randomization test
 %%% inputs: 
 %%% the values per observation (val_per_obs), 
 %%% the value to compare your observations with (fix_val)

@@ -55,9 +55,9 @@ load(fullfile(behav_path,'sketch_behav_RDM.mat'));
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_drawing_IN_vs_SIN_p(layer), photo_drawing_sim_IN(layer), photo_drawing_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer), drawing_RDM_IN(:,:,layer), photo_RDM_SIN(:,:,layer), drawing_RDM_SIN(:,:,layer),1000);
-    [photo_sketch_IN_vs_SIN_p(layer), photo_sketch_sim_IN(layer), photo_sketch_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), photo_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer),1000);
-    [drawing_sketch_IN_vs_SIN_p(layer), drawing_sketch_sim_IN(layer), drawing_sketch_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), drawing_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer),1000);
+    [photo_drawing_IN_vs_SIN_p(layer), photo_drawing_sim_IN(layer), photo_drawing_sim_SIN(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), drawing_RDM_IN(:,:,layer), photo_RDM_SIN(:,:,layer), drawing_RDM_SIN(:,:,layer),1000);
+    [photo_sketch_IN_vs_SIN_p(layer), photo_sketch_sim_IN(layer), photo_sketch_sim_SIN(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), photo_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer),1000);
+    [drawing_sketch_IN_vs_SIN_p(layer), drawing_sketch_sim_IN(layer), drawing_sketch_sim_SIN(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), drawing_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer),1000);
 
 end 
 
@@ -69,9 +69,9 @@ end
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_drawing_IN_vs_FT_p(layer), photo_drawing_sim_IN(layer), photo_drawing_sim_ft(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer), drawing_RDM_IN(:,:,layer), photo_RDM_FT(:,:,layer), drawing_RDM_FT(:,:,layer),10000);
-    [photo_sketch_IN_vs_FT_p(layer), photo_sketch_sim_IN(layer), photo_sketch_sim_ft(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), photo_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),10000);
-    [drawing_sketch_IN_vs_FT_p(layer), drawing_sketch_sim_IN(layer), drawing_sketch_sim_ft(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), drawing_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),10000);
+    [photo_drawing_IN_vs_FT_p(layer), photo_drawing_sim_IN(layer), photo_drawing_sim_ft(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), drawing_RDM_IN(:,:,layer), photo_RDM_FT(:,:,layer), drawing_RDM_FT(:,:,layer),10000);
+    [photo_sketch_IN_vs_FT_p(layer), photo_sketch_sim_IN(layer), photo_sketch_sim_ft(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), photo_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),10000);
+    [drawing_sketch_IN_vs_FT_p(layer), drawing_sketch_sim_IN(layer), drawing_sketch_sim_ft(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), drawing_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),10000);
 
 end 
 
@@ -83,9 +83,9 @@ end
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_drawing_SIN_vs_FT_p(layer), photo_drawing_sim_SIN(layer), photo_drawing_sim_ft(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_SIN(:,:,layer), drawing_RDM_SIN(:,:,layer), photo_RDM_FT(:,:,layer), drawing_RDM_FT(:,:,layer),1000);
-    [photo_sketch_SIN_vs_FT_p(layer), photo_sketch_sim_SIN(layer), photo_sketch_sim_ft(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer), photo_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),1000);
-    [drawing_sketch_SIN_vs_FT_p(layer), drawing_sketch_sim_SIN(layer), drawing_sketch_sim_ft(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer), drawing_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),1000);
+    [photo_drawing_SIN_vs_FT_p(layer), photo_drawing_sim_SIN(layer), photo_drawing_sim_ft(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_SIN(:,:,layer), drawing_RDM_SIN(:,:,layer), photo_RDM_FT(:,:,layer), drawing_RDM_FT(:,:,layer),1000);
+    [photo_sketch_SIN_vs_FT_p(layer), photo_sketch_sim_SIN(layer), photo_sketch_sim_ft(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer), photo_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),1000);
+    [drawing_sketch_SIN_vs_FT_p(layer), drawing_sketch_sim_SIN(layer), drawing_sketch_sim_ft(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_SIN(:,:,layer), sketch_RDM_SIN(:,:,layer), drawing_RDM_FT(:,:,layer), sketch_RDM_FT(:,:,layer),1000);
 
 end 
 
@@ -97,9 +97,9 @@ end
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_DNN_human_IN_vs_SIN_p(layer), photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_SIN(layer)]  = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer),squareform(1-squareform(photo_RDM_behav)), photo_RDM_SIN(:,:,layer), squareform(1-squareform(photo_RDM_behav)),1000);
-    [drawing_DNN_human_IN_vs_SIN_p(layer), drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer),squareform(1-squareform(drawing_RDM_behav)), drawing_RDM_SIN(:,:,layer), squareform(1-squareform(drawing_RDM_behav)),1000);
-    [sketch_DNN_human_IN_vs_SIN_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_SIN(layer)] = compute_RDM_bootstrap_correlation(sketch_RDM_IN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)), sketch_RDM_SIN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)),1000);
+    [photo_DNN_human_IN_vs_SIN_p(layer), photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_SIN(layer)]  = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer),squareform(1-squareform(photo_RDM_behav)), photo_RDM_SIN(:,:,layer), squareform(1-squareform(photo_RDM_behav)),1000);
+    [drawing_DNN_human_IN_vs_SIN_p(layer), drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_SIN(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_IN(:,:,layer),squareform(1-squareform(drawing_RDM_behav)), drawing_RDM_SIN(:,:,layer), squareform(1-squareform(drawing_RDM_behav)),1000);
+    [sketch_DNN_human_IN_vs_SIN_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_SIN(layer)] = compute_RDM_pairwise_randomization_test(sketch_RDM_IN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)), sketch_RDM_SIN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)),1000);
 
 end 
 
@@ -111,9 +111,9 @@ end
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_DNN_human_IN_vs_FT_p(layer), photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_FT(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer), squareform(1-squareform(photo_RDM_behav)), photo_RDM_FT(:,:,layer), squareform(1-squareform(photo_RDM_behav)),1000);
-    [drawing_DNN_human_IN_vs_FT_p(layer),  drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_FT(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer), squareform(1-squareform(drawing_RDM_behav)), drawing_RDM_FT(:,:,layer), squareform(1-squareform(drawing_RDM_behav)),1000);
-    [sketch_DNN_human_IN_vs_FT_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_FT(layer)] = compute_RDM_bootstrap_correlation(sketch_RDM_IN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)), sketch_RDM_FT(:,:,layer), squareform(1-squareform(sketch_RDM_behav)),1000);
+    [photo_DNN_human_IN_vs_FT_p(layer), photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_FT(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), squareform(1-squareform(photo_RDM_behav)), photo_RDM_FT(:,:,layer), squareform(1-squareform(photo_RDM_behav)),1000);
+    [drawing_DNN_human_IN_vs_FT_p(layer),  drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_FT(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_IN(:,:,layer), squareform(1-squareform(drawing_RDM_behav)), drawing_RDM_FT(:,:,layer), squareform(1-squareform(drawing_RDM_behav)),1000);
+    [sketch_DNN_human_IN_vs_FT_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_FT(layer)] = compute_RDM_pairwise_randomization_test(sketch_RDM_IN(:,:,layer), squareform(1-squareform(sketch_RDM_behav)), sketch_RDM_FT(:,:,layer), squareform(1-squareform(sketch_RDM_behav)),1000);
 
 end 
 
@@ -125,9 +125,9 @@ end
 
 for layer = 1:size(photo_RDM_IN,3)
     
-    [photo_DNN_human_SIN_vs_FT_p(layer),photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_FT(layer)] = compute_RDM_bootstrap_correlation(photo_RDM_IN(:,:,layer), photo_RDM_behav, photo_RDM_FT(:,:,layer), photo_RDM_behav,1000);
-    [drawing_DNN_human_SIN_vs_FT_p(layer),  drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_FT(layer)] = compute_RDM_bootstrap_correlation(drawing_RDM_IN(:,:,layer), drawing_RDM_behav, drawing_RDM_FT(:,:,layer), drawing_RDM_behav,1000);
-    [sketch_DNN_human_IN_vs_FT_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_FT(layer)] = compute_RDM_bootstrap_correlation(sketch_RDM_IN(:,:,layer), sketch_RDM_behav, sketch_RDM_FT(:,:,layer), sketch_RDM_behav,1000);
+    [photo_DNN_human_SIN_vs_FT_p(layer),photo_DNN_human_sim_IN(layer),photo_DNN_human_sim_FT(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), photo_RDM_behav, photo_RDM_FT(:,:,layer), photo_RDM_behav,1000);
+    [drawing_DNN_human_SIN_vs_FT_p(layer),  drawing_DNN_human_sim_IN(layer),drawing_DNN_human_sim_FT(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_IN(:,:,layer), drawing_RDM_behav, drawing_RDM_FT(:,:,layer), drawing_RDM_behav,1000);
+    [sketch_DNN_human_IN_vs_FT_p(layer), sketch_DNN_human_sim_IN(layer),sketch_DNN_human_sim_FT(layer)] = compute_RDM_pairwise_randomization_test(sketch_RDM_IN(:,:,layer), sketch_RDM_behav, sketch_RDM_FT(:,:,layer), sketch_RDM_behav,1000);
 
 end 
 

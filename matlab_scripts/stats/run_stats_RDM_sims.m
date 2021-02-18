@@ -7,7 +7,7 @@ clc
 
 % specify where RDMs are saved 
 
-savepath = '/object_drawing_DNN/results';
+savepath = 'D:/object_drawing_DNN/check_results';
 
 % specify which network to use
 
@@ -37,9 +37,9 @@ drawing_sketch_sim = [];
 
 for layer = 1: size(photo_RDM,3)
     
-    [photo_drawing_sim(layer), photo_drawing_RDM_sim_p(layer)] = compute_RDM_perm_test(photo_RDM(:,:,layer), drawing_RDM(:,:,layer), 1000);
-    [photo_sketch_sim(layer), photo_sketch_RDM_sim_p(layer)] = compute_RDM_perm_test(photo_RDM(:,:,layer), sketch_RDM(:,:,layer), 1000);
-    [drawing_sketch_sim(layer), drawing_sketch_RDM_sim_p(layer)] = compute_RDM_perm_test(drawing_RDM(:,:,layer), sketch_RDM(:,:,layer), 1000);
+    [photo_drawing_sim(layer), photo_drawing_RDM_sim_p(layer)] = compute_RDM_randomization_test(photo_RDM(:,:,layer), drawing_RDM(:,:,layer), 1000);
+    [photo_sketch_sim(layer), photo_sketch_RDM_sim_p(layer)] = compute_RDM_randomization_test(photo_RDM(:,:,layer), sketch_RDM(:,:,layer), 1000);
+    [drawing_sketch_sim(layer), drawing_sketch_RDM_sim_p(layer)] = compute_RDM_randomization_test(drawing_RDM(:,:,layer), sketch_RDM(:,:,layer), 1000);
 
 end 
 
@@ -47,16 +47,40 @@ end
 [photo_sketch_RDM_sim_decision,~,~, photo_sketch_RDM_sim_adj_p] = fdr_bh(photo_sketch_RDM_sim_p,0.05,'dep');
 [drawing_sketch_RDM_SIM_decision,~,~,drawing_sketch_RDM_sim_adj_p] = fdr_bh(drawing_sketch_RDM_sim_p,0.05,'dep');
 
+%% test for overall signifance of differences in similarities between layers 
+
+photo_drawing_all_p = compute_RDM_multiple_randomization_test(photo_RDM, drawing_RDM, 1000); 
+photo_sketch_all_p = compute_RDM_multiple_randomization_test(photo_RDM, sketch_RDM, 1000); 
+drawing_sketch_all_p = compute_RDM_multiple_randomization_test(photo_RDM, drawing_RDM, 1000); 
+
+%% test RDM correlation against each other between layers 
+
+% select layers which should be compared 
+
+layer_sel = [1 4 7];
+
+for this_comp = 1: length(layer_sel)-1
+        photo_drawing_intra_comp_p(this_comp) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,layer_sel(this_comp)),drawing_RDM(:,:,layer_sel(this_comp)), photo_RDM(:,:,layer_sel(this_comp+1)), drawing_RDM(:,:,layer_sel(this_comp+1)),1000);
+        photo_sketch_intra_comp_p(this_comp) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,layer_sel(this_comp)),sketch_RDM(:,:,layer_sel(this_comp)), photo_RDM(:,:,layer_sel(this_comp+1)), sketch_RDM(:,:,layer_sel(this_comp+1)),1000);
+        drawing_sketch_intra_comp_p(this_comp) = compute_RDM_pairwise_randomization_test(drawing_RDM(:,:,layer_sel(this_comp)),sketch_RDM(:,:,layer_sel(this_comp)), drawing_RDM(:,:,layer_sel(this_comp+1)), sketch_RDM(:,:,layer_sel(this_comp+1)),1000);
+end 
+
+[photo_drawing_intra_comp_RDM_sim_decision,~,~,photo_drawing_intra_comp_RDM_sim_adj_p] = fdr_bh(photo_drawing_intra_comp_p,0.05,'dep');
+[photo_sketch_intra_comp_RDM_sim_decision,~,~,photo_sketch_intra_comp_RDM_sim_adj_p] = fdr_bh(photo_sketch_intra_comp_p,0.05,'dep');
+[drawing_sketch_intra_comp_RDM_sim_decision,~,~,drawing_sketch_intra_comp_RDM_sim_adj_p] = fdr_bh(drawing_sketch_intra_comp_p,0.05,'dep');
+
 %% test RDM correlations against each other between depiction combinations 
 
 for layer = 1: size(photo_RDM,3)
     
-    photo_drawing_photo_sketch_comp_p(layer) = compute_RDM_bootstrap_correlation(photo_RDM(:,:,layer),drawing_RDM(:,:,layer), photo_RDM(:,:,layer), sketch_RDM(:,:,layer),1000);
-    photo_drawing_drawing_sketch_comp_p(layer) = compute_RDM_bootstrap_correlation(photo_RDM(:,:,layer),drawing_RDM(:,:,layer), drawing_RDM(:,:,layer), sketch_RDM(:,:,layer),1000);
-    photo_sketch_drawing_sketch_comp_p(layer) = compute_RDM_bootstrap_correlation(photo_RDM(:,:,layer),sketch_RDM(:,:,layer), drawing_RDM(:,:,layer), sketch_RDM(:,:,layer),1000);
+    photo_drawing_photo_sketch_comp_p(layer) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,layer),drawing_RDM(:,:,layer), photo_RDM(:,:,layer), sketch_RDM(:,:,layer),1000);
+    photo_drawing_drawing_sketch_comp_p(layer) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,layer),drawing_RDM(:,:,layer), drawing_RDM(:,:,layer), sketch_RDM(:,:,layer),1000);
+    photo_sketch_drawing_sketch_comp_p(layer) = compute_RDM_pairwise_randomization_test(photo_RDM(:,:,layer),sketch_RDM(:,:,layer), drawing_RDM(:,:,layer), sketch_RDM(:,:,layer),1000);
 
 end 
 
 [photo_drawing_photo_sketch_comp_decision,~,~, photo_drawing_photo_sketch_comp_adj_p] = fdr_bh(photo_drawing_photo_sketch_comp_p,0.05,'dep');
 [photo_drawing_drawing_sketch_comp_decision,~,~, photo_drawing_drawing_sketch_comp_adj_p] = fdr_bh(photo_drawing_drawing_sketch_comp_p,0.05,'dep');
 [photo_sketch_drawing_sketch_comp_decision,~,~, photo_sketch_drawing_sketch_comp_adj_p] = fdr_bh(photo_sketch_drawing_sketch_comp_p,0.05,'dep');
+
+
