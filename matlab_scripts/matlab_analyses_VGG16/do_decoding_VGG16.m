@@ -1,4 +1,5 @@
 function all_classification_results = do_decoding_VGG16(photo_activations, drawing_activations, sketch_activations, n_iter)
+
 % classify manmade/natural in each layer for different depictions
 % input: the activation cell arrays for each depiction seperately
 % (*_activations) , the number of cross-validation iterations (n_iter)
@@ -29,6 +30,7 @@ data_all(:,:,1) = double(photo_activations.(fn{layer}));
 data_all(:,:,2) = double(drawing_activations.(fn{layer}));
 data_all(:,:,3) = double(sketch_activations.(fn{layer}));
 
+% precompute kernel
 for i_kern = 1:3
     kernel_all(:,:,i_kern) = data_all(:,:,i_kern)*data_all(:,:,i_kern)';
 end

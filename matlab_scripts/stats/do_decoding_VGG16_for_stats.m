@@ -1,4 +1,4 @@
-function [final_photo_acc, final_drawing_acc, final_sketch_acc] = do_decoding_VGG16(photo_activations, drawing_activations, sketch_activations, n_iter, category_vector,passed_kernel)
+function [final_photo_acc, final_drawing_acc, final_sketch_acc] = do_decoding_VGG16_for_stats(photo_activations, drawing_activations, sketch_activations, n_iter, category_vector,passed_kernel)
 
 % classify manmade/natural in each layer for different depictions -
 % training and testing on the same depiction

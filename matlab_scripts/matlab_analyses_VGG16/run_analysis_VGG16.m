@@ -7,7 +7,7 @@ clc
 
 % specify path where activations are stored 
 
-path = '\object_drawing_DNN\check';
+path = '\object_drawing_DNN\';
 
 % specify activations for which model to load 
 
@@ -15,7 +15,7 @@ net_name = 'VGG16';%'VGG16_SIN';'VGG16_FT';
 
 % specify where results should be saved 
 
-savepath = '\object_drawing_DNN\check_results';
+savepath = '\object_drawing_DNN\results';
 
 % load extracted activations from the network for each depiction seperately
 
