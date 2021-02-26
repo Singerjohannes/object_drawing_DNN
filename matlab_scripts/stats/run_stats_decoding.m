@@ -17,7 +17,7 @@ is_ft = 0; % 1 if yes, otherwise 0
 
 % specify where results should be saved and loaded
 
-savepath = '/object_drawing_DNN/results';
+savepath = '/object_drawing_DNN/';
 
 % load extracted activations from the network for each depiction seperately
 
@@ -67,11 +67,8 @@ for layer=length(fn):-1:1
         end
         
         xclass_kernel_photo_drawing(:,:,layer) = [data_all(:,:,1); data_all(:,:,2)] * [data_all(:,:,1); data_all(:,:,2)]';
-        xclass_kernel_drawing_photo(:,:,layer) = [data_all(:,:,2); data_all(:,:,1)] * [data_all(:,:,2); data_all(:,:,1)]';
         xclass_kernel_photo_sketch(:,:,layer) = [data_all(:,:,1); data_all(:,:,3)] * [data_all(:,:,1); data_all(:,:,3)]';
-        xclass_kernel_sketch_photo(:,:,layer) = [data_all(:,:,3); data_all(:,:,1)] * [data_all(:,:,3); data_all(:,:,1)]';
         xclass_kernel_drawing_sketch(:,:,layer) = [data_all(:,:,2); data_all(:,:,3)] * [data_all(:,:,2); data_all(:,:,3)]';
-        xclass_kernel_sketch_drawing(:,:,layer) = [data_all(:,:,3); data_all(:,:,2)] * [data_all(:,:,3); data_all(:,:,2)]';
 end   
         
 n_perm = 1000; 
@@ -84,25 +81,17 @@ for i=1:n_perm
     fprintf(['Now running decoding for ', net_name, ' Iteration ', num2str(i),'\n'])
     [photo_accs_shuffle(i,:), drawing_accs_shuffle(i,:), sketch_accs_shuffle(i,:)] = do_decoding_VGG16_for_stats(photo_activations, drawing_activations, sketch_activations, 1000, shuffle_vector, kernel_all);
     fprintf(['Now running crossdecoding for ', net_name, ' Iteration ', num2str(i), '\n'])
-    [photo_drawing_accs_shuffle(i,:),drawing_photo_accs_shuffle(i,:) photo_sketch_accs_shuffle(i,:), sketch_photo_accs_shuffle(i,:) drawing_sketch_accs_shuffle(i,:),sketch_drawing_accs_shuffle(i,:)] = do_crossdecoding_VGG16_for_stats(xclass_kernel_photo_drawing, xclass_kernel_drawing_photo, xclass_kernel_photo_sketch, xclass_kernel_sketch_photo, xclass_kernel_drawing_sketch,xclass_kernel_sketch_drawing, 1000,shuffle_vector, kernel_all);
+    [photo_drawing_accs_shuffle(i,:), photo_sketch_accs_shuffle(i,:),drawing_sketch_accs_shuffle(i,:)] = do_crossdecoding_VGG16_for_stats(xclass_kernel_photo_drawing, xclass_kernel_photo_sketch, xclass_kernel_drawing_sketch, 1000,shuffle_vector, kernel_all);
 end 
 
 save(fullfile(savepath,['permuted_classification_accuracies_',net_name]), 'photo_accs_shuffle', 'drawing_accs_shuffle', 'sketch_accs_shuffle');
-save(fullfile(savepath,['permuted_crossclassification_accuracies_',net_name]), 'photo_drawing_accs_shuffle','drawing_photo_accs_shuffle', 'photo_sketch_accs_shuffle', 'sketch_photo_accs_shuffle', 'drawing_sketch_accs_shuffle', 'sketch_drawing_accs_shuffle');
+save(fullfile(savepath,['permuted_crossclassification_accuracies_',net_name]), 'photo_drawing_accs_shuffle', 'photo_sketch_accs_shuffle', 'drawing_sketch_accs_shuffle');
 
 %% load shuffled data if already computed 
 
 load(fullfile(savepath,['permuted_classification_accuracies_',net_name]));
 load(fullfile(savepath,['permuted_crossclassification_accuracies_',net_name]));
 
-% average crossclassifcation over two possible train-test combinations
-% (e.g. photo-drawing, drawing-photo) 
-
-photo_drawing_accs_shuffle = mean(cat(3,photo_drawing_accs_shuffle,drawing_photo_accs_shuffle),3);
-
-photo_sketch_accs_shuffle = mean(cat(3,photo_sketch_accs_shuffle,sketch_photo_accs_shuffle),3);
-
-drawing_sketch_accs_shuffle = mean(cat(3,drawing_sketch_accs_shuffle,sketch_drawing_accs_shuffle),3);
 %% check for significance with permutation test
 
 for layer = 1:size(photo_accs_emp,2)-1

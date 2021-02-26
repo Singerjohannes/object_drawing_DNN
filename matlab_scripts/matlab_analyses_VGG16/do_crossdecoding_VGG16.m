@@ -4,9 +4,8 @@ function all_classification_results = do_crossdecoding_VGG16(photo_activations, 
 % on one depiction but test on the other (and vice versa)
 % input: the activation cell arrays for each depiction seperately
 % (*_activations) , the number of cross-validation iterations (n_iter)
-% output : mean decoding accuracies across pair of combinations (e.g.
-% mean(photo_drawing and drawing_photo) = photo_drawing_accs)
-% and standard errors across layers 
+% output : mean decoding accuracies and std. errors for a given train-test
+% combination (e.g. photo-drawing) 
 
 fn = fieldnames(sketch_activations);
 
@@ -39,11 +38,8 @@ end
 
 %precompute test kernels
 xclass_kernel_photo_drawing= [data_all(:,:,1); data_all(:,:,2)] * [data_all(:,:,1); data_all(:,:,2)]';
-xclass_kernel_drawing_photo = [data_all(:,:,2); data_all(:,:,1)] * [data_all(:,:,2); data_all(:,:,1)]';
 xclass_kernel_photo_sketch = [data_all(:,:,1); data_all(:,:,3)] * [data_all(:,:,1); data_all(:,:,3)]';
-xclass_kernel_sketch_photo = [data_all(:,:,3); data_all(:,:,1)] * [data_all(:,:,3); data_all(:,:,1)]';
 xclass_kernel_drawing_sketch = [data_all(:,:,2); data_all(:,:,3)] * [data_all(:,:,2); data_all(:,:,3)]';
-xclass_kernel_sketch_drawing = [data_all(:,:,3); data_all(:,:,2)] * [data_all(:,:,3); data_all(:,:,2)]';
 
 for i = 1:n_iter
     
@@ -59,46 +55,35 @@ for i = 1:n_iter
     label_test = labels(testind);
     % select test data for all depictions
     xclass_test_photo_drawing = xclass_kernel_photo_drawing(testind+length(category_vector),trainind,:);
-    xclass_test_drawing_photo = xclass_kernel_drawing_photo(testind+length(category_vector),trainind,:);
     xclass_test_photo_sketch = xclass_kernel_photo_sketch(testind+length(category_vector),trainind,:);
-    xclass_test_sketch_photo = xclass_kernel_sketch_photo(testind+length(category_vector),trainind,:);
     xclass_test_drawing_sketch = xclass_kernel_drawing_sketch(testind+length(category_vector),trainind,:);
-    xclass_test_sketch_drawing = xclass_kernel_sketch_drawing(testind+length(category_vector),trainind,:);
     
     % train model for every depiction
     model_photo = svmtrain(label_train,[(1:size(data_train_kernel(:,:,1),1))' data_train_kernel(:,:,1)],'-s 0 -t 4 -c 1 -b 0 -q'); %#ok<SVMTRAIN>
     model_drawing = svmtrain(label_train,[(1:size(data_train_kernel(:,:,2),1))' data_train_kernel(:,:,2)],'-s 0 -t 4 -c 1 -b 0 -q'); %#ok<SVMTRAIN>
-    model_sketch = svmtrain(label_train,[(1:size(data_train_kernel(:,:,3),1))' data_train_kernel(:,:,3)],'-s 0 -t 4 -c 1 -b 0 -q'); %#ok<SVMTRAIN>
 
     
     % get prediction across depictions
     predicted_label_photo_drawing = svmpredict(label_test,[(1:size(xclass_test_photo_drawing,1))'  xclass_test_photo_drawing],model_photo,'-q');
-    predicted_label_drawing_photo = svmpredict(label_test,[(1:size(xclass_test_drawing_photo,1))'  xclass_test_drawing_photo],model_drawing,'-q');
     predicted_label_photo_sketch = svmpredict(label_test,[(1:size(xclass_test_photo_sketch,1))'  xclass_test_photo_sketch],model_photo,'-q');
-    predicted_label_sketch_photo = svmpredict(label_test,[(1:size(xclass_test_sketch_photo,1))'  xclass_test_sketch_photo],model_sketch,'-q');
     predicted_label_drawing_sketch = svmpredict(label_test,[(1:size(xclass_test_drawing_sketch,1))'  xclass_test_drawing_sketch],model_drawing,'-q');
-    predicted_label_sketch_drawing = svmpredict(label_test,[(1:size(xclass_test_sketch_drawing,1))'  xclass_test_sketch_drawing],model_sketch,'-q');
 
     % assign accuracies for this iteration 
     acc_all(i,layer,1) = mean(predicted_label_photo_drawing == label_test);
-    acc_all(i,layer,2) = mean(predicted_label_drawing_photo == label_test);
-    acc_all(i,layer,3) = mean(predicted_label_photo_sketch == label_test);
-    acc_all(i,layer,4) = mean(predicted_label_sketch_photo == label_test);
-    acc_all(i,layer,5) = mean(predicted_label_drawing_sketch == label_test);
-    acc_all(i,layer,6) = mean(predicted_label_sketch_drawing == label_test);
+    acc_all(i,layer,2) = mean(predicted_label_photo_sketch == label_test);
+    acc_all(i,layer,3) = mean(predicted_label_drawing_sketch == label_test);
     
 end
 
 % get the mean and std error for every layer of the iterations 
-final_photo_drawing_acc(layer) = mean(mean(squeeze(cat(3,acc_all(:,layer,1),acc_all(:,layer,2))),2));
-final_photo_drawing_se(layer) = std(mean(squeeze(cat(3,acc_all(:,layer,1),acc_all(:,layer,2))),2))/sqrt(n_iter);
+final_photo_drawing_acc(layer) = mean(acc_all(:,layer,1));
+final_photo_drawing_se(layer) = std(acc_all(:,layer,1))/sqrt(n_iter);
 
-final_photo_sketch_acc(layer) = mean(mean(squeeze(cat(3,acc_all(:,layer,3),acc_all(:,layer,4))),2));
-final_photo_sketch_se(layer) = std(mean(squeeze(cat(3,acc_all(:,layer,3),acc_all(:,layer,4))),2))/sqrt(n_iter);
+final_photo_sketch_acc(layer) = mean(acc_all(:,layer,2));
+final_photo_sketch_se(layer) = std(acc_all(:,layer,2))/sqrt(n_iter);
 
-final_drawing_sketch_acc(layer) = mean(mean(squeeze(cat(3,acc_all(:,layer,5),acc_all(:,layer,6))),2));
-final_drawing_sketch_se(layer) = std(mean(squeeze(cat(3,acc_all(:,layer,5),acc_all(:,layer,6))),2))/sqrt(n_iter);
-
+final_drawing_sketch_acc(layer) = mean(acc_all(:,layer,3));
+final_drawing_sketch_se(layer) = std(acc_all(:,layer,3))/sqrt(n_iter);
 
 end 
 %% save results 

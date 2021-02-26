@@ -15,7 +15,7 @@ net_name = 'VGG16';%'VGG16_SIN';'VGG16_FT';
 
 % specify where results should be saved 
 
-savepath = '\object_drawing_DNN\results';
+savepath = '\object_drawing_DNN\';
 
 % load extracted activations from the network for each depiction seperately
 
