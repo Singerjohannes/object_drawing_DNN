@@ -1,8 +1,9 @@
 # From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction
 
-This repository containes code, data and stimuli for the manuscript "From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction" submitted to the Journal of Vision.
+This repository containes code, data and stimuli for the manuscript "From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction" submitted to the Journal of Vision. 
 With the material contained in this repository all of the results in the manuscript can be reproduced. 
- 
+Link to preprint: https://psyarxiv.com/xg2uy/
+
 ## Models 
 
 The experiments in the manuscript use three different models, one for each of the experiments: 
