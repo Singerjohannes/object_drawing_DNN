@@ -1,6 +1,6 @@
-# The representation of objects across different levels of abstraction in deep convolutional neural networks and human behavior
+# From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction
 
-This repository containes code, data and stimuli for the manuscript "The representation of objects across different levels of abstraction in deep convolutional neural networks and human behavior" submitted to the Journal of Vision.
+This repository containes code, data and stimuli for the manuscript "From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction" submitted to the Journal of Vision.
 With the material contained in this repository all of the results in the manuscript can be reproduced. 
  
 ## Models 
