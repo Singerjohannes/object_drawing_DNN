@@ -35,9 +35,9 @@ load(fullfile(DNN_path, ['top_1_accs_',net_name,'.mat']));
 
 n_perm = 1000;
 
-photo_human_cnn_pval = human_CNN_acc_randomization_test(sel_photo_results, VGG16_accs(1),n_perm);
-drawing_human_cnn_pval = human_CNN_acc_randomization_test(sel_drawing_results, VGG16_accs(2),n_perm);
-sketch_human_cnn_pval = human_CNN_acc_randomization_test(sel_sketch_results, VGG16_accs(3),n_perm);
+photo_human_cnn_pval = human_CNN_acc_randomization_test(sel_photo_results, all_accs(1),n_perm);
+drawing_human_cnn_pval = human_CNN_acc_randomization_test(sel_drawing_results, all_accs(2),n_perm);
+sketch_human_cnn_pval = human_CNN_acc_randomization_test(sel_sketch_results, all_accs(3),n_perm);
 
 human_cnn_p = [photo_human_cnn_pval drawing_human_cnn_pval sketch_human_cnn_pval];
 [human_cnn_decision,~,~,human_cnn_adj_p] = fdr_bh(human_cnn_p,0.05,'dep');

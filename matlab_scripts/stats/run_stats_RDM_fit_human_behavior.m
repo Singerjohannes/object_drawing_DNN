@@ -19,7 +19,7 @@ load(fullfile(savepath, ['sketch_RDM_', net_name]))
 
 % load behavioral data 
 
-behav_path = '\object_drawing_DNN\data';
+behav_path = '/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/data'%'\object_drawing_DNN\data';
 
 load(fullfile(behav_path, 'photo_behav_RDM.mat'));
 
@@ -29,7 +29,7 @@ load(fullfile(behav_path,'sketch_behav_RDM.mat'));
 
 % specify if statistics should be computed only for the finetuned layers 
 
-is_ft = 1; % 1 for yes, 0 for no 
+is_ft = 0; % 1 for yes, 0 for no 
 
 % select only the RDMs from the finetuned layers for statistical testing if is_ft is true 
 
@@ -42,12 +42,6 @@ end
 
 %% run stats on all similarities 
 
-photo_drawing_sim = [];
-photo_drawing_p = [];
-photo_sketch_sim = [];
-photo_sketch_p = []; 
-drawing_sketch_sim = [];
-drawing_sketch_p = []; 
 
 for layer = 1: size(photo_RDM,3)
     

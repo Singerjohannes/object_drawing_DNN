@@ -9,6 +9,14 @@ clc
 
 savepath = '/object_drawing_DNN/results';
 
+% load input RDMs (based on raw pixel values after preprocessing) 
+
+load(fullfile(savepath, 'input_RDMs.mat')) 
+
+input_photo_RDM  = photo_RDM;
+input_drawing_RDM = drawing_RDM; 
+input_sketch_RDM = sketch_RDM; 
+
 % specify which network to use
 
 net_name = 'VGG16'; %'VGG16_SIN' or 'VGG16_FT
@@ -29,6 +37,13 @@ if is_ft
     sketch_RDM = sketch_RDM(:,:,5:end);
 end 
 
+%% test for significant differences between RDM similarities at the input stage 
+
+input_photo_drawing_photo_sketch_comp_p = compute_RDM_pairwise_randomization_test(input_photo_RDM,input_drawing_RDM, input_photo_RDM, input_sketch_RDM,1000);
+input_photo_drawing_drawing_sketch_comp_p = compute_RDM_pairwise_randomization_test(input_photo_RDM,input_drawing_RDM, input_drawing_RDM, input_sketch_RDM,1000);
+input_photo_sketch_drawing_sketch_comp_p = compute_RDM_pairwise_randomization_test(input_photo_RDM,input_sketch_RDM, input_drawing_RDM, input_sketch_RDM,1000);
+
+[input_decision, ~,~, input_diff_adj_p] =  fdr_bh([input_photo_drawing_photo_sketch_comp_p input_photo_drawing_drawing_sketch_comp_p input_photo_sketch_drawing_sketch_comp_p],0.05,'dep');
 %% test for significane of RDM similarities
 
 photo_drawing_sim = [];

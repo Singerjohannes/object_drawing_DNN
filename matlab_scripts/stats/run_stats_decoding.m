@@ -5,7 +5,7 @@ clc
 
 % specify path where activations are stored 
 
-path = '/object_drawing_DNN/';
+savepath =  '/Volumes/Seagate/object_drawing_DNN/check_results';%'/object_drawing_DNN/';
 
 % specify which activations to load 
 
@@ -17,7 +17,7 @@ is_ft = 0; % 1 if yes, otherwise 0
 
 % specify where results should be saved and loaded
 
-savepath = '/object_drawing_DNN/';
+%savepath = '/object_drawing_DNN/';
 
 % load extracted activations from the network for each depiction seperately
 

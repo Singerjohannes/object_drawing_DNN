@@ -17,6 +17,18 @@ photo_RDM_IN = photo_RDM;
 drawing_RDM_IN = drawing_RDM;
 sketch_RDM_IN = sketch_RDM;
 
+% load RDMs for VGG16 with randomly initialized weights - experiment 1
+
+net_name = 'VGG16_random';
+
+load(fullfile(savepath, ['photo_RDM_', net_name]))
+load(fullfile(savepath, ['drawing_RDM_', net_name]))
+load(fullfile(savepath, ['sketch_RDM_', net_name]))
+
+photo_RDM_random = photo_RDM;
+drawing_RDM_random = drawing_RDM;
+sketch_RDM_random = sketch_RDM;
+
 % load RDMs for VGG16 SIN - experiment 2 
 
 net_name = 'VGG16_SIN';
@@ -43,13 +55,28 @@ sketch_RDM_FT = sketch_RDM;
 
 % load behavioral data 
 
-behav_path = '\object_drawing_DNN\data';
+behav_path = '/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/data';
 
 load(fullfile(behav_path, 'photo_behav_RDM.mat'));
 
 load(fullfile(behav_path,'drawing_behav_RDM.mat'));
 
 load(fullfile(behav_path,'sketch_behav_RDM.mat'));
+
+%% compare RDM sims for VGG16 IN and VGG16 randomly initialized
+
+for layer = 1:size(photo_RDM_IN,3)
+    
+    [photo_drawing_IN_vs_random_p(layer), photo_drawing_sim_IN(layer), photo_drawing_sim_random(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), drawing_RDM_IN(:,:,layer), photo_RDM_random(:,:,layer), drawing_RDM_random(:,:,layer),1000);
+    [photo_sketch_IN_vs_random_p(layer), photo_sketch_sim_IN(layer), photo_sketch_sim_random(layer)] = compute_RDM_pairwise_randomization_test(photo_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), photo_RDM_random(:,:,layer), sketch_RDM_random(:,:,layer),1000);
+    [drawing_sketch_IN_vs_random_p(layer), drawing_sketch_sim_IN(layer), drawing_sketch_sim_random(layer)] = compute_RDM_pairwise_randomization_test(drawing_RDM_IN(:,:,layer), sketch_RDM_IN(:,:,layer), drawing_RDM_random(:,:,layer), sketch_RDM_random(:,:,layer),1000);
+
+end 
+
+[photo_drawing_IN_random_decision,~,~, photo_drawing_IN_random_adj_p] = fdr_bh(photo_drawing_IN_vs_random_p,0.05,'dep');
+[photo_sketch_IN_random_decision,~,~, photo_sketch_IN_random_adj_p] = fdr_bh(photo_sketch_IN_vs_random_p,0.05,'dep');
+[drawing_sketch_IN_random_decision,~, ~, drawing_sketch_IN_random_adj_p] = fdr_bh(drawing_sketch_IN_vs_random_p,0.05,'dep');
+
 
 %% compare RDM sims for VGG16 IN and VGG16 SIN 
 

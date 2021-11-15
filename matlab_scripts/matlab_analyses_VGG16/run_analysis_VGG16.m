@@ -11,7 +11,7 @@ path = '\object_drawing_DNN\';
 
 % specify activations for which model to load 
 
-net_name = 'VGG16';%'VGG16_SIN';'VGG16_FT';
+net_name = 'VGG16';%'VGG16_SIN';'VGG16_FT';'VGG16_random';
 
 % specify where results should be saved 
 

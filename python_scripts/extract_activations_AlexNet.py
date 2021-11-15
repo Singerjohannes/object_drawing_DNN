@@ -29,29 +29,10 @@ def prep_batches(loaded_images):
 
 # specify path were activations should be saved to and name of network for saving
 savepath = '/object_drawing_DNN/'
-net_name = 'VGG16'  # either VGG16, VGG16_SIN or VGG16_FT
-
-is_ft = False       # specify whether you want to work with the finetuned or plain VGG model
-is_stylized = False # specify whether you want to work with the stylized or plain VGG model
+net_name = 'AlexNet'  
 
 # load model 
-if is_ft: 
-    filepath = '/object_drawing_DNN/models/'+ net_name + '.pt' # specify path for the weights of the finetuned model
-    model = torchvision.models.vgg16(pretrained=False) 
-    checkpoint = torch.load(filepath)
-    model.load_state_dict(checkpoint)
-    
-elif is_stylized: 
-    filepath = "/object_drawing_DNN/models/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
-    assert os.path.exists(filepath), "Please download the VGG model yourself from the following link and save it locally: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK (too large to be downloaded automatically like the other models)"
-    model = torchvision.models.vgg16(pretrained=False)
-    model.features = torch.nn.DataParallel(model.features)
-    model.cuda()
-    checkpoint = torch.load(filepath)
-    model.load_state_dict(checkpoint["state_dict"])
-
-elif not is_ft:
-    model = torchvision.models.vgg16(pretrained=True) # set to False if you want to use the randomly initialized variant of VGG-16 
+model = torchvision.models.alexnet(pretrained=True)
     
 print(model)
         
@@ -88,24 +69,17 @@ def get_activation(name):
         activations[name] = this_activation
     return hook
 
-if not is_stylized:
-    for idx,layer in enumerate(model.features):
-        layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
+for idx,layer in enumerate(model.features):
+    print(layer)
+    layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
 
-    for idx,layer in enumerate(model.classifier):
-        layer.register_forward_hook(get_activation('Classifier_'+ str(idx))) 
-
-elif is_stylized: 
-    for idx,layer in enumerate(model.features.module):
-        layer.register_forward_hook(get_activation('Layer_'+ str(idx)))   
-    
-    for idx,layer in enumerate(model.classifier):
-        layer.register_forward_hook(get_activation('Classifier_'+ str(idx))) 
-
+for idx,layer in enumerate(model.classifier):
+    print(layer)
+    layer.register_forward_hook(get_activation('Classifier_'+ str(idx))) 
 
 # extract the features for all batches one after another
 cond = ['photo' ,'drawing', 'sketch']    
-relevant_layers = [4,9,16,23,30,0,3,6] 
+relevant_layers = [2,5,12,2,5] 
 
 
 # set model to evaluation mode 
@@ -125,21 +99,21 @@ for cond_idx, batch in enumerate(all_batches):
     # and format 
     formatted_activations = {}
 
-    for layer in relevant_layers:
+    for layer_idx,layer in enumerate(relevant_layers):
         activation_array = []
         for img_act in these_activations:
-            if 'Layer_'+ str(layer) in these_activations[0].keys() and layer in [4,9,16,23,30]:
+            if 'Layer_'+ str(layer) in these_activations[0].keys() and layer_idx<3:
                 activation_array.append(img_act['Layer_' + str(layer)])
             elif 'Classifier_' + str(layer) in these_activations[0].keys():
                 activation_array.append(img_act['Classifier_' + str(layer)])
 
-        formatted_activations[layer] = np.array(activation_array)
+        formatted_activations[layer_idx] = np.array(activation_array)
         
     # update keys 
-    layer_names = ['Pool_1', 'Pool_2', 'Pool_3', 'Pool_4', 'Pool_5', 'Fc1', 'Fc2', 'Fc3']
+    layer_names = ['Pool_1', 'Pool_2', 'Pool_3', 'Fc1', 'Fc2']
 
     for idx, old_layer_name in enumerate(relevant_layers):
-        formatted_activations[layer_names[idx]] = formatted_activations.pop(old_layer_name)
+        formatted_activations[layer_names[idx]] = formatted_activations.pop(idx)
 
     # check activation sizes 
     for act in formatted_activations.values():

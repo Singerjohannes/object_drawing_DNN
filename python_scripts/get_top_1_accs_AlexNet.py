@@ -1,7 +1,7 @@
 """
 Created on Tue Aug 18 14:43:09 2020
 
-get top-1 accuracies for pre-trained or finetuned models
+get top-1 accuracies for AlexNet
 
 @author: Johannes
 """
@@ -20,8 +20,6 @@ import json
 import scipy.io as sio
 import pickle as pkl    
 
-
-
 def load_images(imgpath):
     return [Image.open(imgpath + '/' + fn) for fn in listdir(imgpath)]
 
@@ -32,42 +30,24 @@ def prep_batches(loaded_images):
 
 
 # specify name of model 
-net_name = 'VGG16' #either VGG16, VGG16_SIN or VGG16_FT
+net_name = 'AlexNet' 
 
-is_ft = False       # specify whether you want to work with the finetuned or plain VGG model
-is_stylized = False # specify whether you want to work with the stylized or plain VGG model
 
 # specify where results should be saved 
-results_path = '/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/results'
+results_path = '/object_drawing_DNN/'
 
 # load model 
-if is_ft: 
-    filepath = '/object_drawing_DNN/models/'+ net_name+ '.pt' # specify path for the weights of the finetuned model
-    assert os.path.exists(filepath), "Please download the finetuned VGG model yourself from the following link and save it locally: https://datashare.rzg.mpg.de/s/vUiWZ3oIV3QikZH"
-    model = torchvision.models.vgg16(pretrained=False)
-    checkpoint = torch.load(filepath)
-    model.load_state_dict(checkpoint)
-elif is_stylized: 
-    filepath = "/object_drawing_DNN/models/vgg16_train_60_epochs_lr0.01-6c6fcc9f.pth.tar" 
-    assert os.path.exists(filepath), "Please download the VGG model yourself from the following link and save it locally: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK (too large to be downloaded automatically like the other models)"
-    model = torchvision.models.vgg16(pretrained=False)
-    model.features = torch.nn.DataParallel(model.features)
-    model.cuda()
-    checkpoint = torch.load(filepath)
-    model.load_state_dict(checkpoint["state_dict"])
-
-elif not is_ft:
-    model = torchvision.models.vgg16(pretrained=True)
+model = torchvision.models.alexnet(pretrained=True)
     
 print(model)
 
 # path for files mapping imagenet labels to wordnet ids and their hyponyms/hypernyms
-idx_path = '/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/python_scripts/imnet_mapping'
+idx_path = '/object_drawing_DNN/python_scripts/imnet_mapping'
 
 # setup image-paths
-photo_path = "/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/stimuli/photos"
-drawing_path = "/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/stimuli/drawings"
-sketch_path = "/Users/johannessinger/Documents/Leipzig/Modelling/object_drawing_DNN/stimuli/sketches"
+photo_path = "/object_drawing_DNN/stimuli/photos"
+drawing_path = "/object_drawing_DNN/stimuli/drawings"
+sketch_path = "/object_drawing_DNN/stimuli/sketches"
 
 
 # load the images 
