@@ -6,8 +6,8 @@ Link to preprint: https://psyarxiv.com/xg2uy/. Link to paper will be made availa
 
 ## Models 
 
-The experiments in the manuscript use three different models, one for each of the experiments: 
-- For experiment 1 the VGG-16 model pretrained on ImageNet (which comes with the pytorch package) was used.
+The experiments in the manuscript use different variantes of the CNN VGG-16 for each of the experiments: 
+- For experiment 1 the VGG-16 model pretrained on ImageNet (which comes with the pytorch package) was used. In addition, we evaluated a randomly initialized instance of VGG-16 in experiment 1. 
 - For experiment 2 the VGG-16 model pretrained on the stylized ImageNet dataset (which can be retrieved from: https://drive.google.com/drive/folders/1A0vUWyU6fTuc-xWgwQQeBvzbwi6geYQK) was used. 
 - For experiment 3 the VGG-16 model pretrained on ImageNet and finetuned on the ImageNet-Sketch dataset (https://github.com/HaohanWang/ImageNet-Sketch) was used. The model weights for the finetuned model can be retrieved from (https://datashare.rzg.mpg.de/s/vUiWZ3oIV3QikZH). Alternatively, the model can be finetuned using the finetuning.py script and the ImageNet-Sketch dataset. 
 
