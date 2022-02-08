@@ -22,7 +22,7 @@ The structure of the analysis and the corresponding scripts are:
   - computing the RDM similarity between depictions across layers 
   - computing the RDMs for all depictions combined across layers + computing the MDS-solutions for these RDMs and aligning the MDS-solutions to each other using the procrustes method
   - compute the manmade vs. natural decoding (training and testing on the same depictions) and crossdecoding (training on one depiction but testing on another one) accuracies
-  - compute the fit between network RDMs and human behavioral RDMs for each depiction and layer seperately 
+  - compute the fit between network RDMs and human behavioral RDMs for each depiction and layer seperately
 
  - to compute the statistical comparisons for the results of the analysis the following scripts were used:
     - to compare network accuracies against each other use run_stats_accuracies_all_VGG16.py 
