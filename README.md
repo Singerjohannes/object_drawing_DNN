@@ -1,8 +1,8 @@
 # From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction
 
-This repository containes code, data and stimuli for the manuscript "From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction" submitted to the Journal of Vision. 
-With the material contained in this repository all of the results in the manuscript can be reproduced. 
-Link to preprint: https://psyarxiv.com/xg2uy/. Link to paper will be made available upon publication. 
+This repository containes code, data and stimuli for the paper "From photos to sketches - how humans and deep neural networks process objects across different levels of visual abstraction" published in the Journal of Vision. 
+With the material contained in this repository all of the results in the paper can be reproduced. 
+Link to paper: https://jov.arvojournals.org/Article.aspx?articleid=2778420#247335528. 
 
 ## Models 
 
@@ -30,10 +30,3 @@ The structure of the analysis and the corresponding scripts are:
     - to statistically evaluate RDM similarities and compare them against each other use run_stats_RDM_sims.m
     - to compare RDM similarities of different networks use run_RDM_sim_stats_between_networks.m 
     - to statistically evaluate the decoding/cross-decoding accuracies of the network use run_stats_decoding.m 
-
-- the folder SVM 42 contains additional code for the SVM classification analysis in the Appendix
-    - for this analysis the ImageNet-Sketch images need to be downloaded locally 
-    - next the VGG-16 activations for different layers for the ImageNet-Sketch images need to be extracted with the script extract_all_activations_imagenet_sketch_batch_gpu.py
-    - next the VGG-16 activations for different layers for the experimental stimuli need to be extracted with the scipt extract_all_activations_VGG16.py
-    - finally, a SVM classifier can be trained for every layer separately on the ImageNet-Sketch activations. Importantly, we only use the activations corresponding to the 42 object categories 
-      in the experimental stimulus set to train the SVM. After training the SVM, the classifier is evaluated on the drawing and sketch activations separately
