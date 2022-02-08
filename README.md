@@ -18,10 +18,10 @@ The structure of the analysis and the corresponding scripts are:
 - before running the analysis, the activations of the networks need to be extracted using the following script: extract_activations_all_VGG16.py (specify which model you want to use in the script before runnning)
 - to obtain top-1 accuracies for the stimuli from the experiment separately for each depiction use the script get_top_1_accs_all_VGG16.py (loading models follows the same logic as for extracting activations)
 - run_analyis_VGG16.m runs the whole analysis on the activations from one network. The analysis steps follow the logic of the results section in the paper for one experiment and contain: 
-  - computing RDMs for different depictions across layers
-  - computing the RDM similarity between depictions across layers 
-  - computing the RDMs for all depictions combined across layers + computing the MDS-solutions for these RDMs and aligning the MDS-solutions to each other using the procrustes method
-  - compute the manmade vs. natural decoding (training and testing on the same depictions) and crossdecoding (training on one depiction but testing on another one) accuracies
+  - computing RDMs for different types of depiction across layers
+  - computing the RDM similarity between types of depiction across layers 
+  - computing the RDMs for all types of depiction combined across layers + computing the MDS-solutions for these RDMs and aligning the MDS-solutions to each other using the procrustes method
+  - compute the manmade vs. natural decoding (training and testing on the same type of depiction) and crossdecoding (training on one type of depiction but testing on another one) accuracies
   - compute the fit between network RDMs and human behavioral RDMs for each depiction and layer seperately
 
  - to compute the statistical comparisons for the results of the analysis the following scripts were used:
